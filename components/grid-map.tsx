@@ -37,7 +37,7 @@ export default function GridMap({
 }: GridMapProps) {
   // Organize provinces by region for better visual grouping
   const provincesByRegion = {
-    Northwest: [
+    Norte: [
       { id: "jujuy", name: "Jujuy" },
       { id: "salta", name: "Salta" },
       { id: "tucuman", name: "Tucumán" },
@@ -45,7 +45,7 @@ export default function GridMap({
       { id: "la-rioja", name: "La Rioja" },
       { id: "santiago-del-estero", name: "Santiago del Estero" },
     ],
-    Northeast: [
+    Noreste: [
       { id: "formosa", name: "Formosa" },
       { id: "chaco", name: "Chaco" },
       { id: "misiones", name: "Misiones" },
@@ -57,7 +57,7 @@ export default function GridMap({
       { id: "mendoza", name: "Mendoza" },
       { id: "san-luis", name: "San Luis" },
     ],
-    Center: [
+    Centro: [
       { id: "la-pampa", name: "La Pampa" },
       { id: "cordoba", name: "Córdoba" },
       { id: "santa-fe", name: "Santa Fe" },

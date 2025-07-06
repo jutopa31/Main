@@ -17,37 +17,37 @@ import jsPDF from "jspdf"
 
 // Province mapping
 const provinces: Record<string, any> = {
-  "buenos-aires": { name: "Buenos Aires", region: "Center" },
-  catamarca: { name: "Catamarca", region: "Northwest" },
-  chaco: { name: "Chaco", region: "Northeast" },
+  "buenos-aires": { name: "Buenos Aires", region: "Centro" },
+  catamarca: { name: "Catamarca", region: "Norte" },
+  chaco: { name: "Chaco", region: "Noreste" },
   chubut: { name: "Chubut", region: "Patagonia" },
-  cordoba: { name: "Córdoba", region: "Center" },
-  corrientes: { name: "Corrientes", region: "Northeast" },
-  "entre-rios": { name: "Entre Ríos", region: "Northeast" },
-  formosa: { name: "Formosa", region: "Northeast" },
-  jujuy: { name: "Jujuy", region: "Northwest" },
-  "la-pampa": { name: "La Pampa", region: "Center" },
-  "la-rioja": { name: "La Rioja", region: "Northwest" },
+  cordoba: { name: "Córdoba", region: "Centro" },
+  corrientes: { name: "Corrientes", region: "Noreste" },
+  "entre-rios": { name: "Entre Ríos", region: "Noreste" },
+  formosa: { name: "Formosa", region: "Noreste" },
+  jujuy: { name: "Jujuy", region: "Norte" },
+  "la-pampa": { name: "La Pampa", region: "Centro" },
+  "la-rioja": { name: "La Rioja", region: "Norte" },
   mendoza: { name: "Mendoza", region: "Cuyo" },
-  misiones: { name: "Misiones", region: "Northeast" },
+  misiones: { name: "Misiones", region: "Noreste" },
   neuquen: { name: "Neuquén", region: "Patagonia" },
   "rio-negro": { name: "Río Negro", region: "Patagonia" },
-  salta: { name: "Salta", region: "Northwest" },
+  salta: { name: "Salta", region: "Norte" },
   "san-juan": { name: "San Juan", region: "Cuyo" },
   "san-luis": { name: "San Luis", region: "Cuyo" },
   "santa-cruz": { name: "Santa Cruz", region: "Patagonia" },
-  "santa-fe": { name: "Santa Fe", region: "Center" },
-  "santiago-del-estero": { name: "Santiago del Estero", region: "Northwest" },
+  "santa-fe": { name: "Santa Fe", region: "Centro" },
+  "santiago-del-estero": { name: "Santiago del Estero", region: "Norte" },
   "tierra-del-fuego": { name: "Tierra del Fuego", region: "Patagonia" },
-  tucuman: { name: "Tucumán", region: "Northwest" },
-  caba: { name: "Ciudad Autónoma de Buenos Aires", region: "Center" },
+  tucuman: { name: "Tucumán", region: "Norte" },
+  caba: { name: "Ciudad Autónoma de Buenos Aires", region: "Centro" },
 }
 
 const regionColors = {
-  Northwest: "#ef4444",
-  Northeast: "#22c55e",
+  Norte: "#ef4444",
+  Noreste: "#22c55e",
   Cuyo: "#f59e0b",
-  Center: "#3b82f6",
+  Centro: "#3b82f6",
   Patagonia: "#8b5cf6",
 }
 
@@ -369,15 +369,6 @@ export default function MedicalResidencySurvey() {
                   >
                     <Grid3X3 className="w-4 h-4" />
                     Vista Cuadrícula
-                  </Button>
-                  <Button
-                    variant={mapView === "geographic" ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => setMapView("geographic")}
-                    className="flex items-center gap-2"
-                  >
-                    <Map className="w-4 h-4" />
-                    Vista Geográfica
                   </Button>
                 </div>
               </div>
