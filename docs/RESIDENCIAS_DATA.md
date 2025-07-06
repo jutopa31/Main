@@ -22,7 +22,7 @@ Contiene todos los datos de residencias en formato JSON:
 ### 2. `lib/residencias-service.ts`
 Servicio con funciones para acceder a los datos:
 
-```typescript
+\`\`\`typescript
 import { getListadoCompleto, getResumen } from '@/lib/residencias-service'
 
 // Obtener todas las residencias
@@ -30,17 +30,17 @@ const residencias = getListadoCompleto()
 
 // Obtener el resumen
 const resumen = getResumen()
-```
+\`\`\`
 
 ### 3. `lib/residencias-migration.ts`
 Servicio para convertir los datos al formato de tu sistema:
 
-```typescript
+\`\`\`typescript
 import { migrarTodasLasResidencias } from '@/lib/residencias-migration'
 
 // Migrar todas las residencias al formato del sistema
 const residenciasMigradas = migrarTodasLasResidencias()
-```
+\`\`\`
 
 ## 🚀 Cómo Usar
 
@@ -132,4 +132,4 @@ Ahora tienes:
 - **Mapa interactivo** que muestra todas las residencias
 - **Sistema de contactos** funcionando con residencias oficiales
 - **Filtros y búsqueda** que incluyen datos oficiales
-- **Todo en una sola aplicación** sin complejidad adicional 
+- **Todo en una sola aplicación** sin complejidad adicional

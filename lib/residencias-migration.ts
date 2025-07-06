@@ -125,4 +125,4 @@ export function migrarResidenciasConCupos(): Omit<MedicalResidency, "id" | "last
   const residenciasJSON = getListadoCompleto()
   const residenciasConCupos = residenciasJSON.filter(r => r.cantidad_cupos > 0)
   return residenciasConCupos.map(migrarResidencia)
-} 
+}

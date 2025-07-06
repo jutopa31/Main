@@ -134,4 +134,4 @@ export function getTiposFinanciamiento(): string[] {
     residenciasData.listado_completo_residencias.map(r => r.financiamiento)
   )
   return Array.from(tipos).sort()
-} 
+}

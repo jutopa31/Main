@@ -13,7 +13,7 @@ Para realizar una carga masiva de datos desde fuentes externas (PDFs, documentos
 
 ### Opción A: Agente Inteligente con LLM (Recomendada)
 
-```
+\`\`\`
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
 │   PDF/Documento │───▶│  Procesador     │───▶│  Agente LLM     │
 │                 │    │  de Texto       │    │  (GPT-4/Claude) │
@@ -23,11 +23,11 @@ Para realizar una carga masiva de datos desde fuentes externas (PDFs, documentos
 │   Base de       │◀───│  Validador      │◀───│  Datos          │
 │   Datos         │    │  de Datos       │    │  Estructurados  │
 └─────────────────┘    └─────────────────┘    └─────────────────┘
-```
+\`\`\`
 
 ### Opción B: Herramientas Especializadas
 
-```
+\`\`\`
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
 │   PDF           │───▶│  PyPDF2/        │───▶│  Reglas de      │
 │   Documento     │    │  pdfplumber     │    │  Negocio        │
@@ -37,7 +37,7 @@ Para realizar una carga masiva de datos desde fuentes externas (PDFs, documentos
 │   Base de       │◀───│  Normalizador   │◀───│  Datos          │
 │   Datos         │    │  de Datos       │    │  Extraídos      │
 └─────────────────┘    └─────────────────┘    └─────────────────┘
-```
+\`\`\`
 
 ## Implementación del Agente Inteligente
 
@@ -73,7 +73,7 @@ El componente `PDFProcessor` ofrece:
 
 ### Prompts Especializados
 
-```typescript
+\`\`\`typescript
 const RESIDENCY_INSTRUCTIONS = `
 Eres un agente especializado en extraer información de residencias médicas de Argentina.
 
@@ -109,11 +109,11 @@ Clasifica las especialidades según las categorías estándar:
 
 Normaliza las provincias según los nombres oficiales de Argentina.
 `
-```
+\`\`\`
 
 ### Esquema de Validación
 
-```typescript
+\`\`\`typescript
 const RESIDENCY_SCHEMA = {
   type: "object",
   properties: {
@@ -138,7 +138,7 @@ const RESIDENCY_SCHEMA = {
     }
   }
 }
-```
+\`\`\`
 
 ## Flujo de Trabajo
 
@@ -170,7 +170,7 @@ const RESIDENCY_SCHEMA = {
 ## Configuración de APIs
 
 ### OpenAI
-```typescript
+\`\`\`typescript
 const openaiConfig = {
   provider: "openai",
   model: "gpt-4",
@@ -178,10 +178,10 @@ const openaiConfig = {
   temperature: 0.1,
   maxTokens: 2000
 }
-```
+\`\`\`
 
 ### Anthropic
-```typescript
+\`\`\`typescript
 const anthropicConfig = {
   provider: "anthropic",
   model: "claude-3-sonnet-20240229",
@@ -189,17 +189,17 @@ const anthropicConfig = {
   temperature: 0.1,
   maxTokens: 2000
 }
-```
+\`\`\`
 
 ### Modelo Local (Ollama)
-```typescript
+\`\`\`typescript
 const localConfig = {
   provider: "local",
   model: "llama2",
   temperature: 0.1,
   maxTokens: 2000
 }
-```
+\`\`\`
 
 ## Mejores Prácticas
 
@@ -281,7 +281,7 @@ const localConfig = {
 
 ### Debugging
 
-```typescript
+\`\`\`typescript
 // Habilitar logs detallados
 const debugConfig = {
   ...llmConfig,
@@ -293,7 +293,7 @@ const debugConfig = {
 console.log("LLM Response:", llmResponse)
 console.log("Parsed Data:", parsedData)
 console.log("Validation Errors:", validationErrors)
-```
+\`\`\`
 
 ## Costos y Optimización
 
@@ -310,4 +310,4 @@ console.log("Validation Errors:", validationErrors)
 
 ## Conclusión
 
-La implementación del agente inteligente con LLM proporciona una solución robusta y escalable para la importación masiva de datos de residencias médicas. La combinación de procesamiento de PDFs, extracción inteligente con LLM, y validación automática asegura alta precisión y eficiencia en el proceso de carga de datos. 
+La implementación del agente inteligente con LLM proporciona una solución robusta y escalable para la importación masiva de datos de residencias médicas. La combinación de procesamiento de PDFs, extracción inteligente con LLM, y validación automática asegura alta precisión y eficiencia en el proceso de carga de datos.
