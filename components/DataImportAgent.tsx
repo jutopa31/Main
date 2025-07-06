@@ -506,4 +506,4 @@ export default function DataImportAgent({ onImportResidencies }: DataImportAgent
       </Card>
     </div>
   )
-} 
+}
