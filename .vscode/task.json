@@ -1,0 +1,27 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "launch-chrome",
+            "type": "shell",
+            "command": "timeout 3 && start chrome http://localhost:5000",
+            "windows": {
+                "command": "timeout 3 && start chrome http://localhost:5000"
+            },
+            "linux": {
+                "command": "sleep 3 && google-chrome http://localhost:5000"
+            },
+            "osx": {
+                "command": "sleep 3 && open -a 'Google Chrome' http://localhost:5000"
+            },
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        }
+    ]
+}

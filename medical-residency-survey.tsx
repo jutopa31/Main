@@ -12,6 +12,8 @@ import ResidencyRegistry from "./components/residency-registry"
 import ContactManagement from "./components/contact-management"
 import EnhancedReports from "./components/enhanced-reports"
 import GridMap from "./components/grid-map"
+// @ts-ignore
+import jsPDF from "jspdf"
 
 // Province mapping
 const provinces: Record<string, any> = {
@@ -182,8 +184,25 @@ export default function MedicalResidencySurvey() {
   }
 
   const handleGenerateReport = (reportConfig: any) => {
-    console.log("Generating report:", reportConfig)
-    // Here you could implement PDF generation, email sending, etc.
+    try {
+      if (!reportConfig) {
+        console.error("[Reporte] El objeto reportConfig es nulo o indefinido:", reportConfig)
+        return
+      }
+      // Log detallado del objeto recibido
+      console.log("[Reporte] Generando reporte con configuración:", JSON.stringify(reportConfig, null, 2))
+      // Implementación básica de PDF
+      const doc = new jsPDF();
+      doc.setFontSize(16);
+      doc.text(reportConfig.title || "Reporte de Residencias Médicas", 10, 20);
+      doc.setFontSize(12);
+      doc.text(`Residencias incluidas: ${reportConfig.residencies?.length ?? 0}`, 10, 35);
+      doc.text(`Fecha de generación: ${(new Date(reportConfig.generatedAt)).toLocaleString()}`, 10, 45);
+      // Puedes agregar más detalles aquí según lo que quieras mostrar
+      doc.save("reporte-residencias.pdf");
+    } catch (error) {
+      console.error("[Reporte] Error inesperado al generar el reporte:", error)
+    }
   }
 
   const getProvinceStats = (provinceId: string) => {

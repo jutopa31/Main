@@ -214,16 +214,22 @@ export default function EnhancedReports({ residencies, contacts, onGenerateRepor
   }
 
   const generatePDFReport = () => {
-    const reportData = {
-      title: reportConfig.title || "Reporte de Residencias Médicas",
-      filters,
-      stats,
-      residencies: filteredResidencies,
-      contacts: reportConfig.includeContacts ? contacts : [],
-      generatedAt: new Date(),
-      config: reportConfig,
+    try {
+      const reportData = {
+        title: reportConfig.title || "Reporte de Residencias Médicas",
+        filters,
+        stats,
+        residencies: filteredResidencies,
+        contacts: reportConfig.includeContacts ? contacts : [],
+        generatedAt: new Date(),
+        config: reportConfig,
+      }
+      // Log detallado del reporte generado
+      console.log("[PDF] Datos del reporte a generar:", JSON.stringify(reportData, null, 2))
+      onGenerateReport(reportData)
+    } catch (error) {
+      console.error("[PDF] Error al generar el reporte PDF:", error)
     }
-    onGenerateReport(reportData)
   }
 
   return (
