@@ -79,4 +79,4 @@ const DatabaseImportExport: React.FC = () => {
   );
 };
 
-export default DatabaseImportExport; 
+export default DatabaseImportExport;
