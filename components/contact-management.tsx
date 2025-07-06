@@ -10,8 +10,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Switch } from "@/components/ui/switch"
-import { Plus, Save, Edit, Trash2, Phone, Mail, User, MessageSquare, Star, Clock, Building } from "lucide-react"
+import { Plus, Save, Edit, Trash2, Phone, Mail, User, MessageSquare, Star, Clock, Building, Download, FileText, MessageCircle } from "lucide-react"
 import type { Contact, ContactInteraction, MedicalResidency } from "../types/residency"
+// @ts-ignore
+import jsPDF from "jspdf"
 
 interface ContactManagementProps {
   residencies: MedicalResidency[]
@@ -157,6 +159,266 @@ export default function ContactManagement({
     }
   }
 
+  // Funciones de exportación
+  const handleExportContactsPDF = () => {
+    try {
+      const doc = new jsPDF()
+      
+      // Título del reporte
+      doc.setFontSize(20)
+      doc.text("Reporte de Contactos - Residencias Médicas", 20, 20)
+      
+      // Información del reporte
+      doc.setFontSize(12)
+      doc.text(`Fecha de generación: ${new Date().toLocaleDateString('es-AR')}`, 20, 35)
+      doc.text(`Total de contactos: ${contacts.length}`, 20, 45)
+      
+      // Estadísticas adicionales
+      const primaryContacts = contacts.filter(c => c.isPrimaryContact).length
+      const contactsByRole = contacts.reduce((acc, contact) => {
+        acc[contact.role] = (acc[contact.role] || 0) + 1
+        return acc
+      }, {} as Record<string, number>)
+      
+      doc.text(`Contactos principales: ${primaryContacts}`, 20, 55)
+      doc.text(`Contactos con interacciones: ${contacts.filter(c => c.contactHistory.length > 0).length}`, 20, 65)
+      
+      let yPosition = 80
+      const pageHeight = 280
+      let pageNumber = 1
+      
+      contacts.forEach((contact, index) => {
+        // Verificar si necesitamos una nueva página
+        if (yPosition > pageHeight) {
+          doc.addPage()
+          pageNumber++
+          yPosition = 20
+        }
+        
+        // Información básica del contacto
+        doc.setFontSize(14)
+        doc.setFont('helvetica', 'bold')
+        doc.text(`${index + 1}. ${contact.name}`, 20, yPosition)
+        
+        yPosition += 8
+        doc.setFontSize(10)
+        doc.setFont('helvetica', 'normal')
+        
+        // Detalles del contacto
+        doc.text(`Cargo: ${contact.position}`, 25, yPosition)
+        yPosition += 5
+        doc.text(`Email: ${contact.email}`, 25, yPosition)
+        yPosition += 5
+        doc.text(`Teléfono: ${contact.phone}`, 25, yPosition)
+        yPosition += 5
+        doc.text(`Rol: ${getRoleText(contact.role)}`, 25, yPosition)
+        yPosition += 5
+        doc.text(`Residencia: ${getResidencyName(contact.residencyId)}`, 25, yPosition)
+        
+        if (contact.department) {
+          yPosition += 5
+          doc.text(`Departamento: ${contact.department}`, 25, yPosition)
+        }
+        
+        if (contact.isPrimaryContact) {
+          yPosition += 5
+          doc.text(`Contacto Principal: Sí`, 25, yPosition)
+        }
+        
+        if (contact.lastContactDate) {
+          yPosition += 5
+          doc.text(`Último contacto: ${new Date(contact.lastContactDate).toLocaleDateString('es-AR')}`, 25, yPosition)
+        }
+        
+        // Historial de contactos (últimos 3)
+        if (contact.contactHistory.length > 0) {
+          yPosition += 8
+          doc.setFontSize(10)
+          doc.setFont('helvetica', 'bold')
+          doc.text("Historial de Contactos:", 25, yPosition)
+          yPosition += 5
+          doc.setFontSize(8)
+          doc.setFont('helvetica', 'normal')
+          
+          const recentHistory = contact.contactHistory.slice(-3)
+          recentHistory.forEach((interaction) => {
+            doc.text(`• ${new Date(interaction.date).toLocaleDateString('es-AR')} - ${interaction.type} - ${interaction.outcome}`, 30, yPosition)
+            yPosition += 4
+            if (interaction.notes) {
+              doc.text(`  Nota: ${interaction.notes}`, 35, yPosition)
+              yPosition += 4
+            }
+          })
+        }
+        
+        yPosition += 10
+      })
+      
+      // Número de página
+      doc.setFontSize(8)
+      doc.text(`Página ${pageNumber}`, 20, 290)
+      
+      doc.save("reporte-contactos-residencias.pdf")
+    } catch (error) {
+      console.error("Error al generar PDF:", error)
+      alert("Error al generar el PDF. Por favor, inténtalo de nuevo.")
+    }
+  }
+
+  const handleExportContactsCSV = () => {
+    try {
+      // Crear encabezados del CSV
+      const headers = [
+        "Nombre",
+        "Cargo",
+        "Departamento",
+        "Email",
+        "Teléfono",
+        "Teléfono Alternativo",
+        "Rol",
+        "Contacto Principal",
+        "Residencia Asociada",
+        "Dirección",
+        "Método Preferido",
+        "Mejor Horario",
+        "Último Contacto",
+        "Total Interacciones",
+        "Fecha de Creación",
+        "Última Actualización"
+      ]
+      
+      // Crear datos del CSV
+      const csvData = contacts.map(contact => [
+        contact.name,
+        contact.position,
+        contact.department || "",
+        contact.email,
+        contact.phone,
+        contact.alternativePhone || "",
+        getRoleText(contact.role),
+        contact.isPrimaryContact ? "Sí" : "No",
+        getResidencyName(contact.residencyId),
+        contact.address || "",
+        contact.preferredContactMethod || "",
+        contact.bestTimeToContact || "",
+        contact.lastContactDate ? new Date(contact.lastContactDate).toLocaleDateString('es-AR') : "",
+        contact.contactHistory.length.toString(),
+        new Date(contact.createdAt).toLocaleDateString('es-AR'),
+        new Date(contact.updatedAt).toLocaleDateString('es-AR')
+      ])
+      
+      // Combinar encabezados y datos
+      const csvContent = [headers, ...csvData]
+        .map(row => row.map(cell => `"${cell}"`).join(','))
+        .join('\n')
+      
+      // Crear y descargar el archivo
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+      const link = document.createElement('a')
+      const url = URL.createObjectURL(blob)
+      link.setAttribute('href', url)
+      link.setAttribute('download', `contactos-residencias-${new Date().toISOString().split('T')[0]}.csv`)
+      link.style.visibility = 'hidden'
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+    } catch (error) {
+      console.error("Error al generar CSV:", error)
+      alert("Error al generar el CSV. Por favor, inténtalo de nuevo.")
+    }
+  }
+
+  // Función para exportar contactos filtrados
+  const handleExportFilteredContacts = () => {
+    try {
+      const doc = new jsPDF()
+      
+      // Título del reporte
+      doc.setFontSize(20)
+      doc.text("Reporte de Contactos Filtrados", 20, 20)
+      
+      // Información del reporte
+      doc.setFontSize(12)
+      doc.text(`Fecha de generación: ${new Date().toLocaleDateString('es-AR')}`, 20, 35)
+      doc.text(`Total de contactos filtrados: ${filteredContacts.length}`, 20, 45)
+      
+      if (searchTerm) {
+        doc.text(`Búsqueda: "${searchTerm}"`, 20, 55)
+      }
+      
+      if (filterRole !== "all") {
+        doc.text(`Filtro por rol: ${getRoleText(filterRole)}`, 20, 65)
+      }
+      
+      let yPosition = 80
+      const pageHeight = 280
+      let pageNumber = 1
+      
+      filteredContacts.forEach((contact, index) => {
+        // Verificar si necesitamos una nueva página
+        if (yPosition > pageHeight) {
+          doc.addPage()
+          pageNumber++
+          yPosition = 20
+        }
+        
+        // Información básica del contacto
+        doc.setFontSize(14)
+        doc.setFont('helvetica', 'bold')
+        doc.text(`${index + 1}. ${contact.name}`, 20, yPosition)
+        
+        yPosition += 8
+        doc.setFontSize(10)
+        doc.setFont('helvetica', 'normal')
+        
+        // Detalles del contacto
+        doc.text(`Cargo: ${contact.position}`, 25, yPosition)
+        yPosition += 5
+        doc.text(`Email: ${contact.email}`, 25, yPosition)
+        yPosition += 5
+        doc.text(`Teléfono: ${contact.phone}`, 25, yPosition)
+        yPosition += 5
+        doc.text(`Rol: ${getRoleText(contact.role)}`, 25, yPosition)
+        yPosition += 5
+        doc.text(`Residencia: ${getResidencyName(contact.residencyId)}`, 25, yPosition)
+        
+        yPosition += 10
+      })
+      
+      // Número de página
+      doc.setFontSize(8)
+      doc.text(`Página ${pageNumber}`, 20, 290)
+      
+      doc.save("contactos-filtrados.pdf")
+    } catch (error) {
+      console.error("Error al generar PDF filtrado:", error)
+      alert("Error al generar el PDF filtrado. Por favor, inténtalo de nuevo.")
+    }
+  }
+
+  // Estadísticas de contactos
+  const getContactStats = () => {
+    const totalContacts = contacts.length
+    const primaryContacts = contacts.filter(c => c.isPrimaryContact).length
+    const contactsWithInteractions = contacts.filter(c => c.contactHistory.length > 0).length
+    const totalInteractions = contacts.reduce((sum, c) => sum + c.contactHistory.length, 0)
+    
+    const contactsByRole = contacts.reduce((acc, contact) => {
+      acc[contact.role] = (acc[contact.role] || 0) + 1
+      return acc
+    }, {} as Record<string, number>)
+    
+    return {
+      totalContacts,
+      primaryContacts,
+      contactsWithInteractions,
+      totalInteractions,
+      contactsByRole
+    }
+  }
+
+  const stats = getContactStats()
+
   return (
     <div className="space-y-6">
       {/* Header and Controls */}
@@ -165,10 +427,30 @@ export default function ContactManagement({
           <h2 className="text-2xl font-bold">Gestión de Contactos</h2>
           <p className="text-gray-600">Administra los contactos de las residencias médicas</p>
         </div>
-        <Button onClick={() => setShowAddForm(true)} className="flex items-center gap-2">
-          <Plus className="w-4 h-4" />
-          Nuevo Contacto
-        </Button>
+        <div className="flex gap-2">
+          <Button 
+            variant="outline" 
+            onClick={handleExportContactsPDF}
+            className="flex items-center gap-2"
+            disabled={contacts.length === 0}
+          >
+            <FileText className="w-4 h-4" />
+            Exportar PDF
+          </Button>
+          <Button 
+            variant="outline" 
+            onClick={handleExportContactsCSV}
+            className="flex items-center gap-2"
+            disabled={contacts.length === 0}
+          >
+            <Download className="w-4 h-4" />
+            Exportar CSV
+          </Button>
+          <Button onClick={() => setShowAddForm(true)} className="flex items-center gap-2">
+            <Plus className="w-4 h-4" />
+            Nuevo Contacto
+          </Button>
+        </div>
       </div>
 
       {/* Search and Filters */}
@@ -454,6 +736,17 @@ export default function ContactManagement({
                   <Button variant="outline" size="sm" onClick={() => onDeleteContact(contact.id)}>
                     <Trash2 className="w-4 h-4" />
                   </Button>
+                  {/* Botón de WhatsApp */}
+                  <a
+                    href={`https://wa.me/${contact.phone.replace(/[^\d]/g, "")}?text=Hola%20${encodeURIComponent(contact.name)}!%20Te%20contacto%20por%20la%20residencia%20m%C3%A9dica.`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="Enviar WhatsApp"
+                  >
+                    <Button variant="outline" size="sm" className="!p-2 text-green-600 border-green-400 hover:bg-green-50">
+                      <MessageCircle className="w-5 h-5" />
+                    </Button>
+                  </a>
                 </div>
               </div>
 
