@@ -5,13 +5,15 @@ import type React from "react"
 import { useState, useEffect } from "react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { MapPin, BarChart3, Phone, Building, Grid3X3, Map } from "lucide-react"
+import { MapPin, BarChart3, Phone, Building, Grid3X3, Map, Database } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import type { MedicalResidency, Contact } from "./types/residency"
 import ResidencyRegistry from "./components/residency-registry"
 import ContactManagement from "./components/contact-management"
 import EnhancedReports from "./components/enhanced-reports"
 import GridMap from "./components/grid-map"
+import DataImportAgent from "./components/DataImportAgent"
+import PDFProcessor from "./components/PDFProcessor"
 // @ts-ignore
 import jsPDF from "jspdf"
 
@@ -138,6 +140,15 @@ export default function MedicalResidencySurvey() {
       lastUpdated: new Date(),
     }
     setResidencies((prev) => [...prev, newResidency])
+  }
+
+  const handleAddResidencies = (residenciesData: Omit<MedicalResidency, "id" | "lastUpdated">[]) => {
+    const newResidencies: MedicalResidency[] = residenciesData.map((residencyData) => ({
+      ...residencyData,
+      id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
+      lastUpdated: new Date(),
+    }))
+    setResidencies((prev) => [...prev, ...newResidencies])
   }
 
   const handleUpdateResidency = (id: string, updates: Partial<MedicalResidency>) => {
@@ -352,6 +363,10 @@ export default function MedicalResidencySurvey() {
             <BarChart3 className="w-4 h-4" />
             Reportes y Análisis
           </TabsTrigger>
+          <TabsTrigger value="import" className="flex items-center gap-2">
+            <Database className="w-4 h-4" />
+            Importación Masiva
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="map" className="space-y-6">
@@ -531,6 +546,24 @@ export default function MedicalResidencySurvey() {
 
         <TabsContent value="reports">
           <EnhancedReports residencies={residencies} contacts={contacts} onGenerateReport={handleGenerateReport} />
+        </TabsContent>
+
+        <TabsContent value="import">
+          <div className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Importación Masiva de Datos</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600 mb-4">
+                  Utiliza nuestro agente inteligente para extraer automáticamente información de residencias médicas 
+                  desde PDFs y otras fuentes externas. El sistema utiliza LLMs para procesar y estructurar los datos.
+                </p>
+              </CardContent>
+            </Card>
+            
+            <DataImportAgent onImportResidencies={handleAddResidencies} />
+          </div>
         </TabsContent>
       </Tabs>
     </div>
