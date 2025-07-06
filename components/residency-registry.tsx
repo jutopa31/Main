@@ -9,9 +9,10 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Plus, Save, Edit, Trash2, MapPin, Users, DollarSign, Building, GraduationCap, FileText, Phone, User } from "lucide-react"
+import { Plus, Save, Edit, Trash2, MapPin, Users, DollarSign, Building, GraduationCap, FileText, Phone, User, Database } from "lucide-react"
 import type { MedicalResidency, Contact } from "../types/residency"
 import { Switch } from "@/components/ui/switch"
+import { migrarTodasLasResidencias } from "../lib/residencias-migration"
 
 
 interface RegistryProps {
@@ -250,6 +251,22 @@ export default function ResidencyRegistry({
           <Button onClick={() => setShowAddForm(true)} className="flex items-center gap-2">
             <Plus className="w-4 h-4" />
             Nueva Residencia
+          </Button>
+          <Button 
+            onClick={() => {
+              const residenciasOficiales = migrarTodasLasResidencias()
+              const residenciasConIds = residenciasOficiales.map((residencia) => ({
+                ...residencia,
+                id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
+                lastUpdated: new Date(),
+              }))
+              onAddResidencies(residenciasConIds)
+            }} 
+            variant="outline"
+            className="flex items-center gap-2"
+          >
+            <Database className="w-4 h-4" />
+            Recargar Datos Oficiales
           </Button>
         </div>
       </div>
