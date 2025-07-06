@@ -1,0 +1,953 @@
+{
+  "fecha_extraccion": "2025-07-06",
+  "resumen": {
+    "numero_total_residencias": 112,
+    "total_cupos": 1049,
+    "provincias_cubiertas": 22
+  },
+  "detalle_por_provincia": {
+    "BUENOS AIRES": {
+      "cantidad_residencias": 9,
+      "total_cupos": 273,
+      "financiamiento": {
+        "nacional": 269,
+        "sin especificar": 4
+      }
+    },
+    "C.A.B.A.": {
+      "cantidad_residencias": 7,
+      "total_cupos": 137,
+      "financiamiento": {
+        "nacional": 137,
+        "sin especificar": 0
+      }
+    },
+    "CATAMARCA": {
+      "cantidad_residencias": 3,
+      "total_cupos": 15,
+      "financiamiento": {
+        "sin especificar": 15
+      }
+    },
+    "CHACO": {
+      "cantidad_residencias": 4,
+      "total_cupos": 26,
+      "financiamiento": {
+        "sin especificar": 26
+      }
+    },
+    "CHUBUT": {
+      "cantidad_residencias": 5,
+      "total_cupos": 29,
+      "financiamiento": {
+        "sin especificar": 29
+      }
+    },
+    "CORDOBA": {
+      "cantidad_residencias": 1,
+      "total_cupos": 6,
+      "financiamiento": {
+        "Mixto": 6
+      }
+    },
+    "CORRIENTES": {
+      "cantidad_residencias": 6,
+      "total_cupos": 23,
+      "financiamiento": {
+        "sin especificar": 23
+      }
+    },
+    "ENTRE RIOS": {
+      "cantidad_residencias": 5,
+      "total_cupos": 30,
+      "financiamiento": {
+        "sin especificar": 30
+      }
+    },
+    "FORMOSA": {
+      "cantidad_residencias": 2,
+      "total_cupos": 4,
+      "financiamiento": {
+        "sin especificar": 4
+      }
+    },
+    "JUJUY": {
+      "cantidad_residencias": 3,
+      "total_cupos": 26,
+      "financiamiento": {
+        "sin especificar": 26
+      }
+    },
+    "LA PAMPA": {
+      "cantidad_residencias": 3,
+      "total_cupos": 17,
+      "financiamiento": {
+        "sin especificar": 17
+      }
+    },
+    "LA RIOJA": {
+      "cantidad_residencias": 2,
+      "total_cupos": 33,
+      "financiamiento": {
+        "sin especificar": 33
+      }
+    },
+    "MISIONES": {
+      "cantidad_residencias": 8,
+      "total_cupos": 41,
+      "financiamiento": {
+        "sin especificar": 41
+      }
+    },
+    "RIO NEGRO": {
+      "cantidad_residencias": 4,
+      "total_cupos": 10,
+      "financiamiento": {
+        "sin especificar": 10
+      }
+    },
+    "SALTA": {
+      "cantidad_residencias": 5,
+      "total_cupos": 19,
+      "financiamiento": {
+        "sin especificar": 19
+      }
+    },
+    "SAN JUAN": {
+      "cantidad_residencias": 3,
+      "total_cupos": 67,
+      "financiamiento": {
+        "sin especificar": 67
+      }
+    },
+    "SAN LUIS": {
+      "cantidad_residencias": 7,
+      "total_cupos": 49,
+      "financiamiento": {
+        "sin especificar": 49
+      }
+    },
+    "SANTA CRUZ": {
+      "cantidad_residencias": 4,
+      "total_cupos": 21,
+      "financiamiento": {
+        "sin especificar": 21
+      }
+    },
+    "SANTA FE": {
+      "cantidad_residencias": 18,
+      "total_cupos": 164,
+      "financiamiento": {
+        "nacional": 2,
+        "sin especificar": 162
+      }
+    },
+    "SANTIAGO DEL ESTERO": {
+      "cantidad_residencias": 3,
+      "total_cupos": 10,
+      "financiamiento": {
+        "sin especificar": 10
+      }
+    },
+    "TIERRA DEL FUEGO": {
+      "cantidad_residencias": 4,
+      "total_cupos": 12,
+      "financiamiento": {
+        "sin especificar": 12
+      }
+    },
+    "TUCUMAN": {
+      "cantidad_residencias": 6,
+      "total_cupos": 37,
+      "financiamiento": {
+        "sin especificar": 37
+      }
+    }
+  },
+  "listado_completo_residencias": [
+    {
+      "numero": 1,
+      "provincia": "BUENOS AIRES",
+      "institucion": "HOSP. NAC. Y COM. DR. RAMON CARRILLO",
+      "cantidad_cupos": 10,
+      "financiamiento": "nacional"
+    },
+    {
+      "numero": 2,
+      "provincia": "BUENOS AIRES",
+      "institucion": "HOSPITAL DE ALTA COMPLEJIDAD DEL BICENTENARIO ESTEBAN ECHEVERRIA",
+      "cantidad_cupos": 8,
+      "financiamiento": "nacional"
+    },
+    {
+      "numero": 3,
+      "provincia": "BUENOS AIRES",
+      "institucion": "HOSPITAL DE ALTA COMPLEJIDAD EN RED EL CRUCE NESTOR CARLOS KIRCHNER",
+      "cantidad_cupos": 47,
+      "financiamiento": "nacional"
+    },
+    {
+      "numero": 4,
+      "provincia": "BUENOS AIRES",
+      "institucion": "HOSPITAL DE CUENCA ALTA NESTOR KIRCHNER",
+      "cantidad_cupos": 15,
+      "financiamiento": "nacional"
+    },
+    {
+      "numero": 5,
+      "provincia": "BUENOS AIRES",
+      "institucion": "HOSPITAL DR. RENE FAVALORO - SAMIC",
+      "cantidad_cupos": 4,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 6,
+      "provincia": "BUENOS AIRES",
+      "institucion": "HOSPITAL NACIONAL BALDOMERO SOMMER",
+      "cantidad_cupos": 7,
+      "financiamiento": "nacional"
+    },
+    {
+      "numero": 7,
+      "provincia": "BUENOS AIRES",
+      "institucion": "HOSPITAL NACIONAL PROFESOR DR. ALEJANDRO POSADAS",
+      "cantidad_cupos": 156,
+      "financiamiento": "nacional"
+    },
+    {
+      "numero": 8,
+      "provincia": "BUENOS AIRES",
+      "institucion": "INSTITUTO NACIONAL DE EPIDEMIOLOGIA \"DR. JUAN H. JARA\"",
+      "cantidad_cupos": 2,
+      "financiamiento": "nacional"
+    },
+    {
+      "numero": 9,
+      "provincia": "BUENOS AIRES",
+      "institucion": "INSTITUTO NACIONAL DE REHABILITACION PSICOFISICA DEL SUR",
+      "cantidad_cupos": 24,
+      "financiamiento": "nacional"
+    },
+    {
+      "numero": 10,
+      "provincia": "C.A.B.A.",
+      "institucion": "A.N.L.I.S. - INST. NAC. DE ENF. INF. AGUDAS DR. CARLOS MALBRAN",
+      "cantidad_cupos": 4,
+      "financiamiento": "nacional"
+    },
+    {
+      "numero": 11,
+      "provincia": "C.A.B.A.",
+      "institucion": "A.N.M.A.T.",
+      "cantidad_cupos": 8,
+      "financiamiento": "nacional"
+    },
+    {
+      "numero": 12,
+      "provincia": "C.A.B.A.",
+      "institucion": "CENTRO NACIONAL DE GENETICA MEDICA DR. EDUARDO E. CASTILLA - CENAGEM - ANLIS",
+      "cantidad_cupos": 5,
+      "financiamiento": "nacional"
+    },
+    {
+      "numero": 13,
+      "provincia": "C.A.B.A.",
+      "institucion": "DIRECCION NACIONAL DE EPIDEMIOLOGIA",
+      "cantidad_cupos": 8,
+      "financiamiento": "nacional"
+    },
+    {
+      "numero": 14,
+      "provincia": "C.A.B.A.",
+      "institucion": "HOSPITAL DE PEDIATRIA PROF.J.P. GARRAHAN",
+      "cantidad_cupos": 112,
+      "financiamiento": "nacional"
+    },
+    {
+      "numero": 15,
+      "provincia": "C.A.B.A.",
+      "institucion": "HOSPITAL NACIONAL EN RED LIC. LAURA BONAPARTE",
+      "cantidad_cupos": 0,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 16,
+      "provincia": "C.A.B.A.",
+      "institucion": "INSTITUTO DE INVESTIGACIONES HEMATOLOGICAS DR. MARIANO CASTEX",
+      "cantidad_cupos": 0,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 17,
+      "provincia": "CATAMARCA",
+      "institucion": "HOSPITAL INTERZONAL DE NIÑOS EVA PERON",
+      "cantidad_cupos": 3,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 18,
+      "provincia": "CATAMARCA",
+      "institucion": "HOSPITAL INTERZONAL SAN JUAN BAUTISTA",
+      "cantidad_cupos": 11,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 19,
+      "provincia": "CATAMARCA",
+      "institucion": "MATERNIDAD PROVINCIAL",
+      "cantidad_cupos": 1,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 20,
+      "provincia": "CHACO",
+      "institucion": "HOSPITAL 4 DE JUNIO DR RAMON CARRILLO",
+      "cantidad_cupos": 4,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 21,
+      "provincia": "CHACO",
+      "institucion": "HOSPITAL DEL BICENTENARIO GENERAL GÜEMES",
+      "cantidad_cupos": 4,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 22,
+      "provincia": "CHACO",
+      "institucion": "HOSPITAL JULIO C. PERRANDO",
+      "cantidad_cupos": 10,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 23,
+      "provincia": "CHACO",
+      "institucion": "HOSPITAL PEDIATRICO DR. AVELINO L. CASTELAN",
+      "cantidad_cupos": 8,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 24,
+      "provincia": "CHUBUT",
+      "institucion": "HOSPITAL REGIONAL COMODORO RIVADAVIA",
+      "cantidad_cupos": 9,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 25,
+      "provincia": "CHUBUT",
+      "institucion": "HOSPITAL RURAL DE SARMIENTO",
+      "cantidad_cupos": 1,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 26,
+      "provincia": "CHUBUT",
+      "institucion": "HOSPITAL SUBZONAL DE PUERTO MADRYN",
+      "cantidad_cupos": 7,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 27,
+      "provincia": "CHUBUT",
+      "institucion": "HOSPITAL ZONAL ESQUEL",
+      "cantidad_cupos": 6,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 28,
+      "provincia": "CHUBUT",
+      "institucion": "HOSPITAL ZONAL TRELEW",
+      "cantidad_cupos": 6,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 29,
+      "provincia": "CORDOBA",
+      "institucion": "HOSPITAL DE CLINICAS DE CORDOBA (UNIVERSITARIO)",
+      "cantidad_cupos": 6,
+      "financiamiento": "Mixto"
+    },
+    {
+      "numero": 30,
+      "provincia": "CORRIENTES",
+      "institucion": "HOSPITAL ANGELA IGLESIA DE LLANO",
+      "cantidad_cupos": 3,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 31,
+      "provincia": "CORRIENTES",
+      "institucion": "HOSPITAL ELOISA T. DE VIDAL",
+      "cantidad_cupos": 1,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 32,
+      "provincia": "CORRIENTES",
+      "institucion": "HOSPITAL ESCUELA JOSE FRANCISCO DE SAN MARTIN",
+      "cantidad_cupos": 3,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 33,
+      "provincia": "CORRIENTES",
+      "institucion": "HOSPITAL JOSE R. VIDAL",
+      "cantidad_cupos": 2,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 34,
+      "provincia": "CORRIENTES",
+      "institucion": "HOSPITAL PEDIATRICO JUAN PABLO II",
+      "cantidad_cupos": 5,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 35,
+      "provincia": "CORRIENTES",
+      "institucion": "UNIDAD DE MEDICINA GENERAL FAM. Y COMUNITARIA - UNIVERSIDAD",
+      "cantidad_cupos": 9,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 36,
+      "provincia": "ENTRE RIOS",
+      "institucion": "HOSPITAL CENTENARIO",
+      "cantidad_cupos": 1,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 37,
+      "provincia": "ENTRE RIOS",
+      "institucion": "HOSPITAL DELICIA CONCEPCION MASVERNAT",
+      "cantidad_cupos": 5,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 38,
+      "provincia": "ENTRE RIOS",
+      "institucion": "HOSPITAL JUSTO JOSE DE URQUIZA",
+      "cantidad_cupos": 11,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 39,
+      "provincia": "ENTRE RIOS",
+      "institucion": "HOSPITAL MATERNO INFANTIL SAN ROQUE",
+      "cantidad_cupos": 2,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 40,
+      "provincia": "ENTRE RIOS",
+      "institucion": "HOSPITAL SAN MARTIN",
+      "cantidad_cupos": 11,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 41,
+      "provincia": "FORMOSA",
+      "institucion": "HOSPITAL CENTRAL DE FORMOSA",
+      "cantidad_cupos": 2,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 42,
+      "provincia": "FORMOSA",
+      "institucion": "HOSPITAL LA MADRE Y EL NIÑO",
+      "cantidad_cupos": 2,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 43,
+      "provincia": "JUJUY",
+      "institucion": "HOSPITAL MATERNO INFANTIL DR. HECTOR QUINTANA",
+      "cantidad_cupos": 9,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 44,
+      "provincia": "JUJUY",
+      "institucion": "HOSPITAL PABLO SORIA",
+      "cantidad_cupos": 13,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 45,
+      "provincia": "JUJUY",
+      "institucion": "HOSPITAL SAN ROQUE",
+      "cantidad_cupos": 4,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 46,
+      "provincia": "LA PAMPA",
+      "institucion": "HOSPITAL DR. LUCIO MOLAS",
+      "cantidad_cupos": 12,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 47,
+      "provincia": "LA PAMPA",
+      "institucion": "HOSPITAL GENERALISTA COMUNITARIO EVITA",
+      "cantidad_cupos": 3,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 48,
+      "provincia": "LA PAMPA",
+      "institucion": "HOSPITAL GOBERNADOR CENTENO",
+      "cantidad_cupos": 2,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 49,
+      "provincia": "LA RIOJA",
+      "institucion": "HOSPITAL DE LA MADRE Y EL NIÑO",
+      "cantidad_cupos": 12,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 50,
+      "provincia": "LA RIOJA",
+      "institucion": "HOSPITAL E. VERA BARROS",
+      "cantidad_cupos": 21,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 51,
+      "provincia": "MISIONES",
+      "institucion": "CENTRO DE ASISTENCIA EN SALUD MENTAL DR. RAMON CARRILLO",
+      "cantidad_cupos": 6,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 52,
+      "provincia": "MISIONES",
+      "institucion": "DIRECCION DE EPIDEMIOLOGIA",
+      "cantidad_cupos": 2,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 53,
+      "provincia": "MISIONES",
+      "institucion": "HOSPITAL DR. RAMON MADARIAGA",
+      "cantidad_cupos": 15,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 54,
+      "provincia": "MISIONES",
+      "institucion": "HOSPITAL MATERNO NEONATAL",
+      "cantidad_cupos": 2,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 55,
+      "provincia": "MISIONES",
+      "institucion": "HOSPITAL PROVINCIAL DE AUTOGESTION DE PEDIATRIA",
+      "cantidad_cupos": 8,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 56,
+      "provincia": "MISIONES",
+      "institucion": "HOSPITAL PUBLICO S.A.M.I.C. ELDORADO",
+      "cantidad_cupos": 3,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 57,
+      "provincia": "MISIONES",
+      "institucion": "HOSPITAL PUBLICO S.A.M.I.C. IGUAZU",
+      "cantidad_cupos": 1,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 58,
+      "provincia": "MISIONES",
+      "institucion": "HOSPITAL PUBLICO S.A.M.I.C. OBERA",
+      "cantidad_cupos": 4,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 59,
+      "provincia": "RIO NEGRO",
+      "institucion": "HOSPITAL AREA PROGRAMATICA EL BOLSON",
+      "cantidad_cupos": 2,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 60,
+      "provincia": "RIO NEGRO",
+      "institucion": "HOSPITAL DR FRANCISCO LOPEZ LIMA",
+      "cantidad_cupos": 1,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 61,
+      "provincia": "RIO NEGRO",
+      "institucion": "HOSPITAL DR PEDRO MOGUILLANSKY",
+      "cantidad_cupos": 4,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 62,
+      "provincia": "RIO NEGRO",
+      "institucion": "HOSPITAL DR RAMON CARRILLO",
+      "cantidad_cupos": 3,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 63,
+      "provincia": "SALTA",
+      "institucion": "HOSPITAL DE GESTION DESCENTRALIZADA SAN BERNARDO",
+      "cantidad_cupos": 7,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 64,
+      "provincia": "SALTA",
+      "institucion": "HOSPITAL DEL MILAGRO",
+      "cantidad_cupos": 1,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 65,
+      "provincia": "SALTA",
+      "institucion": "HOSPITAL DR. J. CASTELLANOS",
+      "cantidad_cupos": 1,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 66,
+      "provincia": "SALTA",
+      "institucion": "HOSPITAL DR. MIGUEL RAGONE",
+      "cantidad_cupos": 1,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 67,
+      "provincia": "SALTA",
+      "institucion": "HOSPITAL MATERNO INFANTIL",
+      "cantidad_cupos": 9,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 68,
+      "provincia": "SAN JUAN",
+      "institucion": "CENTRO DE ADIESTRAMIENTO DR. RENE G. FAVALORO",
+      "cantidad_cupos": 5,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 69,
+      "provincia": "SAN JUAN",
+      "institucion": "HOSPITAL DR. GUILLERMO RAWSON",
+      "cantidad_cupos": 46,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 70,
+      "provincia": "SAN JUAN",
+      "institucion": "HOSPITAL DR. MARCIAL QUIROGA",
+      "cantidad_cupos": 16,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 71,
+      "provincia": "SAN LUIS",
+      "institucion": "HOSPITAL CENTRAL RAMON CARRILLO",
+      "cantidad_cupos": 23,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 72,
+      "provincia": "SAN LUIS",
+      "institucion": "HOSPITAL ESCUELA DE SALUD MENTAL",
+      "cantidad_cupos": 5,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 73,
+      "provincia": "SAN LUIS",
+      "institucion": "HOSPITAL JUAN DOMINGO PERON DE VILLA MERCEDES",
+      "cantidad_cupos": 3,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 74,
+      "provincia": "SAN LUIS",
+      "institucion": "HOSPITAL JUAN GREGORIO VIVAS",
+      "cantidad_cupos": 6,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 75,
+      "provincia": "SAN LUIS",
+      "institucion": "HOSPITAL SAN LUIS",
+      "cantidad_cupos": 7,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 76,
+      "provincia": "SAN LUIS",
+      "institucion": "MATERNIDAD PROVINCIAL DRA. TERESITA BAIGORRIA",
+      "cantidad_cupos": 4,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 77,
+      "provincia": "SAN LUIS",
+      "institucion": "MATERNIDAD PROVINCIAL VILLA MERCEDES",
+      "cantidad_cupos": 1,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 78,
+      "provincia": "SANTA CRUZ",
+      "institucion": "HOSPITAL CALETA OLIVIA",
+      "cantidad_cupos": 1,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 79,
+      "provincia": "SANTA CRUZ",
+      "institucion": "HOSPITAL DE ALTA COMPLEJIDAD EL CALAFATE - SAMIC",
+      "cantidad_cupos": 14,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 80,
+      "provincia": "SANTA CRUZ",
+      "institucion": "HOSPITAL DISTRITAL JOSE FORMENTI",
+      "cantidad_cupos": 1,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 81,
+      "provincia": "SANTA CRUZ",
+      "institucion": "HOSPITAL REGIONAL RIO GALLEGOS",
+      "cantidad_cupos": 5,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 82,
+      "provincia": "SANTA FE",
+      "institucion": "A.N.L.I.S. - INSTITUTO NACIONAL DE ENFERMEDADES RESPIRATORIAS DR. EMILIO CONI",
+      "cantidad_cupos": 2,
+      "financiamiento": "nacional"
+    },
+    {
+      "numero": 83,
+      "provincia": "SANTA FE",
+      "institucion": "CENTRO DE SALUD LA POSTA",
+      "cantidad_cupos": 6,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 84,
+      "provincia": "SANTA FE",
+      "institucion": "HOSPITAL CENTRAL RECONQUISTA",
+      "cantidad_cupos": 13,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 85,
+      "provincia": "SANTA FE",
+      "institucion": "HOSPITAL DE EMERGENCIAS DR. CLEMENTE ALVAREZ",
+      "cantidad_cupos": 6,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 86,
+      "provincia": "SANTA FE",
+      "institucion": "HOSPITAL DE NIÑOS DR. ORLANDO ALASSIA",
+      "cantidad_cupos": 17,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 87,
+      "provincia": "SANTA FE",
+      "institucion": "HOSPITAL DR A. GUTIERREZ - SAMCO",
+      "cantidad_cupos": 7,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 88,
+      "provincia": "SANTA FE",
+      "institucion": "HOSPITAL DR. JOSE MARIA CULLEN",
+      "cantidad_cupos": 9,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 89,
+      "provincia": "SANTA FE",
+      "institucion": "HOSPITAL ESCUELA EVA PERON DE GRANADERO BAIGORRIA",
+      "cantidad_cupos": 21,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 90,
+      "provincia": "SANTA FE",
+      "institucion": "HOSPITAL JOSE BERNARDO ITURRASPE",
+      "cantidad_cupos": 13,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 91,
+      "provincia": "SANTA FE",
+      "institucion": "HOSPITAL PROTOMEDICO DR. MANUEL RODRIGUEZ",
+      "cantidad_cupos": 2,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 92,
+      "provincia": "SANTA FE",
+      "institucion": "HOSPITAL PROVINCIAL DE NIÑOS ZONA NORTE",
+      "cantidad_cupos": 5,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 93,
+      "provincia": "SANTA FE",
+      "institucion": "HOSPITAL PROVINCIAL DE ROSARIO",
+      "cantidad_cupos": 28,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 94,
+      "provincia": "SANTA FE",
+      "institucion": "HOSPITAL PROVINCIAL DEL CENTENARIO",
+      "cantidad_cupos": 17,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 95,
+      "provincia": "SANTA FE",
+      "institucion": "HOSPITAL PROVINCIAL SAN CARLOS",
+      "cantidad_cupos": 1,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 96,
+      "provincia": "SANTA FE",
+      "institucion": "HOSPITAL SAMCO ESPERANZA DR. ALONSO CRIADO",
+      "cantidad_cupos": 1,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 97,
+      "provincia": "SANTA FE",
+      "institucion": "HOSPITAL SAMCO JAIME FERRE",
+      "cantidad_cupos": 8,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 98,
+      "provincia": "SANTA FE",
+      "institucion": "HOSPITAL SAMCO SAN JUSTO DR. OSCAR LANZA",
+      "cantidad_cupos": 1,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 99,
+      "provincia": "SANTA FE",
+      "institucion": "HOSPITAL SAMCO SANTO TOME - DR. RICARDO NANZER",
+      "cantidad_cupos": 7,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 100,
+      "provincia": "SANTIAGO DEL ESTERO",
+      "institucion": "CENTRO INTEGRAL DE SALUD MENTAL",
+      "cantidad_cupos": 4,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 101,
+      "provincia": "SANTIAGO DEL ESTERO",
+      "institucion": "CENTRO PROVINCIAL DE SALUD INFANTIL EVA PERON",
+      "cantidad_cupos": 1,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 102,
+      "provincia": "SANTIAGO DEL ESTERO",
+      "institucion": "HOSPITAL REGIONAL DR. RAMON CARRILLO",
+      "cantidad_cupos": 5,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 103,
+      "provincia": "TIERRA DEL FUEGO",
+      "institucion": "DIRECCION DE ATENCION PRIMARIA DE SALUD ZONA NORTE",
+      "cantidad_cupos": 3,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 104,
+      "provincia": "TIERRA DEL FUEGO",
+      "institucion": "DIRECCION DE ATENCION PRIMARIA DE SALUD ZONA SUR",
+      "cantidad_cupos": 3,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 105,
+      "provincia": "TIERRA DEL FUEGO",
+      "institucion": "HOSPITAL REGIONAL RIO GRANDE",
+      "cantidad_cupos": 4,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 106,
+      "provincia": "TIERRA DEL FUEGO",
+      "institucion": "HOSPITAL REGIONAL USHUAIA",
+      "cantidad_cupos": 2,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 107,
+      "provincia": "TUCUMAN",
+      "institucion": "CENTRO DE SALUD ZENON SANTILLAN",
+      "cantidad_cupos": 11,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 108,
+      "provincia": "TUCUMAN",
+      "institucion": "HOSPITAL ANGEL CRUZ PADILLA",
+      "cantidad_cupos": 2,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 109,
+      "provincia": "TUCUMAN",
+      "institucion": "HOSPITAL COLONIA DR. JUAN OBARRIO",
+      "cantidad_cupos": 7,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 110,
+      "provincia": "TUCUMAN",
+      "institucion": "HOSPITAL DEL NIÑO JESUS",
+      "cantidad_cupos": 9,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 111,
+      "provincia": "TUCUMAN",
+      "institucion": "HOSPITAL PRESIDENTE DR NICOLAS AVELLANEDA",
+      "cantidad_cupos": 1,
+      "financiamiento": "sin especificar"
+    },
+    {
+      "numero": 112,
+      "provincia": "TUCUMAN",
+      "institucion": "INSTITUTO DE MATERNIDAD Y GINECOL.NUESTRA SEÑORA DE LAS MERCEDES",
+      "cantidad_cupos": 7,
+      "financiamiento": "sin especificar"
+    }
+  ]
+} 

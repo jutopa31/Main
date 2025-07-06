@@ -14,6 +14,7 @@ import EnhancedReports from "./components/enhanced-reports"
 import GridMap from "./components/grid-map"
 import DataImportAgent from "./components/DataImportAgent"
 import PDFProcessor from "./components/PDFProcessor"
+import { migrarTodasLasResidencias } from "./lib/residencias-migration"
 // @ts-ignore
 import jsPDF from "jspdf"
 
@@ -60,6 +61,8 @@ export default function MedicalResidencySurvey() {
   const [residencies, setResidencies] = useState<MedicalResidency[]>([])
   const [contacts, setContacts] = useState<Contact[]>([])
   const [mapView, setMapView] = useState<"grid" | "geographic">("grid")
+  const [activeTab, setActiveTab] = useState("map")
+  const [selectedResidencyForContacts, setSelectedResidencyForContacts] = useState<string | null>(null)
 
   // Load data from localStorage on mount
   useEffect(() => {
@@ -79,6 +82,17 @@ export default function MedicalResidencySurvey() {
       } catch (error) {
         console.error("Error loading saved residencies:", error)
       }
+    } else {
+      // Si no hay residencias guardadas, cargar automáticamente los datos oficiales
+      console.log("Cargando datos oficiales automáticamente...")
+      const residenciasOficiales = migrarTodasLasResidencias()
+      const residenciasConIds = residenciasOficiales.map((residencia) => ({
+        ...residencia,
+        id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
+        lastUpdated: new Date(),
+      }))
+      setResidencies(residenciasConIds)
+      console.log(`Se cargaron automáticamente ${residenciasConIds.length} residencias oficiales`)
     }
 
     if (savedContacts) {
@@ -216,6 +230,18 @@ export default function MedicalResidencySurvey() {
     }
   }
 
+  const handleNavigateToContacts = (residencyId?: string) => {
+    setSelectedResidencyForContacts(residencyId || null)
+    setActiveTab("contacts")
+  }
+
+  // Cambiar automáticamente a la pestaña de contactos cuando se navega desde una residencia
+  useEffect(() => {
+    if (selectedResidencyForContacts) {
+      setActiveTab("contacts")
+    }
+  }, [selectedResidencyForContacts])
+
   const getProvinceStats = (provinceId: string) => {
     const provinceName = provinces[provinceId]?.name
     const provinceResidencies = residencies.filter((r) => r.province === provinceName)
@@ -345,7 +371,7 @@ export default function MedicalResidencySurvey() {
         </p>
       </div>
 
-      <Tabs defaultValue="map" className="space-y-6">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
         <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="map" className="flex items-center gap-2">
             <MapPin className="w-4 h-4" />
@@ -527,9 +553,12 @@ export default function MedicalResidencySurvey() {
           <ResidencyRegistry
             selectedProvince={selectedProvince ? provinces[selectedProvince]?.name : null}
             residencies={residencies}
+            contacts={contacts}
             onAddResidency={handleAddResidency}
+            onAddResidencies={handleAddResidencies}
             onUpdateResidency={handleUpdateResidency}
             onDeleteResidency={handleDeleteResidency}
+            onNavigateToContacts={handleNavigateToContacts}
           />
         </TabsContent>
 
@@ -537,6 +566,7 @@ export default function MedicalResidencySurvey() {
           <ContactManagement
             residencies={residencies}
             contacts={contacts}
+            selectedResidencyId={selectedResidencyForContacts}
             onAddContact={handleAddContact}
             onUpdateContact={handleUpdateContact}
             onDeleteContact={handleDeleteContact}

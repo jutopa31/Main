@@ -9,15 +9,20 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Plus, Save, Edit, Trash2, MapPin, Users, DollarSign, Building, GraduationCap, FileText } from "lucide-react"
-import type { MedicalResidency } from "../types/residency"
+import { Plus, Save, Edit, Trash2, MapPin, Users, DollarSign, Building, GraduationCap, FileText, Phone, User } from "lucide-react"
+import type { MedicalResidency, Contact } from "../types/residency"
+import { Switch } from "@/components/ui/switch"
+
 
 interface RegistryProps {
   selectedProvince: string | null
   residencies: MedicalResidency[]
+  contacts: Contact[]
   onAddResidency: (residency: Omit<MedicalResidency, "id" | "lastUpdated">) => void
+  onAddResidencies: (residencies: Omit<MedicalResidency, "id" | "lastUpdated">[]) => void
   onUpdateResidency: (id: string, updates: Partial<MedicalResidency>) => void
   onDeleteResidency: (id: string) => void
+  onNavigateToContacts?: (residencyId?: string) => void
 }
 
 const specialties = [
@@ -75,18 +80,22 @@ const provinces = [
 export default function ResidencyRegistry({
   selectedProvince,
   residencies,
+  contacts,
   onAddResidency,
+  onAddResidencies,
   onUpdateResidency,
   onDeleteResidency,
+  onNavigateToContacts,
 }: RegistryProps) {
   const [showAddForm, setShowAddForm] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
   const [searchTerm, setSearchTerm] = useState("")
   const [filters, setFilters] = useState({
-    specialty: "",
-    fundingSource: "",
-    vacancyStatus: "",
-    registryStatus: "",
+    specialty: "all",
+    fundingSource: "all",
+    vacancyStatus: "all",
+    contactada: "all",
+    encuesta: "all",
   })
 
   const [formData, setFormData] = useState<Partial<MedicalResidency>>({
@@ -103,7 +112,8 @@ export default function ResidencyRegistry({
     vacancyStatus: "unknown",
     fundingSource: "public",
     registryStatus: "active",
-    surveyStatus: "pending",
+    contactada: false,
+    encuesta: false,
     programType: "basic",
     notes: [],
     benefits: [],
@@ -117,12 +127,25 @@ export default function ResidencyRegistry({
       residency.city.toLowerCase().includes(searchTerm.toLowerCase())
 
     const matchesProvince = !selectedProvince || residency.province === selectedProvince
-    const matchesSpecialty = !filters.specialty || residency.specialty === filters.specialty
-    const matchesFunding = !filters.fundingSource || residency.fundingSource === filters.fundingSource
-    const matchesVacancy = !filters.vacancyStatus || residency.vacancyStatus === filters.vacancyStatus
-    const matchesRegistry = !filters.registryStatus || residency.registryStatus === filters.registryStatus
+    const matchesSpecialty = !filters.specialty || 
+      filters.specialty === "all" || 
+      residency.specialty === filters.specialty
+    const matchesFunding = !filters.fundingSource || 
+      filters.fundingSource === "all" || 
+      residency.fundingDetails === filters.fundingSource
+    const matchesVacancy = !filters.vacancyStatus || 
+      filters.vacancyStatus === "all" || 
+      residency.vacancyStatus === filters.vacancyStatus
+    const matchesContactada = !filters.contactada || 
+      filters.contactada === "all" ||
+      (filters.contactada === "true" && residency.contactada) ||
+      (filters.contactada === "false" && !residency.contactada)
+    const matchesEncuesta = !filters.encuesta || 
+      filters.encuesta === "all" ||
+      (filters.encuesta === "true" && residency.encuesta) ||
+      (filters.encuesta === "false" && !residency.encuesta)
 
-    return matchesSearch && matchesProvince && matchesSpecialty && matchesFunding && matchesVacancy && matchesRegistry
+    return matchesSearch && matchesProvince && matchesSpecialty && matchesFunding && matchesVacancy && matchesContactada && matchesEncuesta
   })
 
   const handleSubmit = () => {
@@ -150,7 +173,8 @@ export default function ResidencyRegistry({
       vacancyStatus: "unknown",
       fundingSource: "public",
       registryStatus: "active",
-      surveyStatus: "pending",
+      contactada: false,
+      encuesta: false,
       programType: "basic",
       notes: [],
       benefits: [],
@@ -208,6 +232,10 @@ export default function ResidencyRegistry({
     }
   }
 
+  const getResidencyContacts = (residencyId: string) => {
+    return contacts.filter(contact => contact.residencyId === residencyId)
+  }
+
   return (
     <div className="space-y-6">
       {/* Header and Controls */}
@@ -218,68 +246,114 @@ export default function ResidencyRegistry({
             {selectedProvince ? `Mostrando residencias en ${selectedProvince}` : "Todas las residencias"}
           </p>
         </div>
-        <Button onClick={() => setShowAddForm(true)} className="flex items-center gap-2">
-          <Plus className="w-4 h-4" />
-          Nueva Residencia
-        </Button>
+        <div className="flex gap-2">
+          <Button onClick={() => setShowAddForm(true)} className="flex items-center gap-2">
+            <Plus className="w-4 h-4" />
+            Nueva Residencia
+          </Button>
+        </div>
       </div>
 
       {/* Search and Filters */}
       <Card>
         <CardContent className="p-4">
           <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-            <Input
-              placeholder="Buscar residencias..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="md:col-span-2"
-            />
+            <div className="md:col-span-2">
+              <Label className="text-sm font-medium text-gray-700 mb-2 block">Buscar</Label>
+              <Input
+                placeholder="Buscar residencias..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
 
-            <Select value={filters.specialty} onValueChange={(value) => setFilters({ ...filters, specialty: value })}>
-              <SelectTrigger>
-                <SelectValue placeholder="Especialidad" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Todas</SelectItem>
-                {specialties.map((specialty) => (
-                  <SelectItem key={specialty} value={specialty}>
-                    {specialty}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <div>
+              <Label className="text-sm font-medium text-gray-700 mb-2 block">Especialidad</Label>
+              <Select value={filters.specialty} onValueChange={(value) => setFilters({ ...filters, specialty: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Especialidad" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Todas</SelectItem>
+                  {specialties.map((specialty) => (
+                    <SelectItem key={specialty} value={specialty}>
+                      {specialty}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
 
-            <Select
-              value={filters.fundingSource}
-              onValueChange={(value) => setFilters({ ...filters, fundingSource: value })}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Financiamiento" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Todos</SelectItem>
-                <SelectItem value="public">Público</SelectItem>
-                <SelectItem value="private">Privado</SelectItem>
-                <SelectItem value="mixed">Mixto</SelectItem>
-                <SelectItem value="other">Otro</SelectItem>
-              </SelectContent>
-            </Select>
+            <div>
+              <Label className="text-sm font-medium text-gray-700 mb-2 block">Financiamiento</Label>
+              <Select
+                value={filters.fundingSource}
+                onValueChange={(value) => setFilters({ ...filters, fundingSource: value })}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Financiamiento" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Todos</SelectItem>
+                  <SelectItem value="nacional">Nacional</SelectItem>
+                  <SelectItem value="Mixto">Mixto</SelectItem>
+                  <SelectItem value="sin especificar">Sin especificar</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
 
-            <Select
-              value={filters.vacancyStatus}
-              onValueChange={(value) => setFilters({ ...filters, vacancyStatus: value })}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Vacantes" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Todos</SelectItem>
-                <SelectItem value="open">Abiertas</SelectItem>
-                <SelectItem value="closed">Cerradas</SelectItem>
-                <SelectItem value="pending">Pendientes</SelectItem>
-                <SelectItem value="unknown">Desconocido</SelectItem>
-              </SelectContent>
-            </Select>
+            <div>
+              <Label className="text-sm font-medium text-gray-700 mb-2 block">Vacantes</Label>
+              <Select
+                value={filters.vacancyStatus}
+                onValueChange={(value) => setFilters({ ...filters, vacancyStatus: value })}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Vacantes" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Todos</SelectItem>
+                  <SelectItem value="open">Abiertas</SelectItem>
+                  <SelectItem value="closed">Cerradas</SelectItem>
+                  <SelectItem value="pending">Pendientes</SelectItem>
+                  <SelectItem value="unknown">Desconocido</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <Label className="text-sm font-medium text-gray-700 mb-2 block">Contactada</Label>
+              <Select
+                value={filters.contactada}
+                onValueChange={(value) => setFilters({ ...filters, contactada: value })}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Contactada" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Todas</SelectItem>
+                  <SelectItem value="true">Contactada</SelectItem>
+                  <SelectItem value="false">No Contactada</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <Label className="text-sm font-medium text-gray-700 mb-2 block">Encuesta</Label>
+              <Select
+                value={filters.encuesta}
+                onValueChange={(value) => setFilters({ ...filters, encuesta: value })}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Encuesta" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Todas</SelectItem>
+                  <SelectItem value="true">Encuestada</SelectItem>
+                  <SelectItem value="false">No Encuestada</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
         </CardContent>
       </Card>
@@ -564,31 +638,31 @@ export default function ResidencyRegistry({
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="registryStatus">Estado del Registro</Label>
-                    <Select
-                      value={formData.registryStatus || "active"}
-                      onValueChange={(value) => setFormData({ ...formData, registryStatus: value as any })}
-                    >
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="active">Activo</SelectItem>
-                        <SelectItem value="inactive">Inactivo</SelectItem>
-                        <SelectItem value="suspended">Suspendido</SelectItem>
-                        <SelectItem value="under_review">En Revisión</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <Label htmlFor="contactada">Contactada</Label>
+                    <div className="flex items-center space-x-2 mt-2">
+                      <Switch
+                        id="contactada"
+                        checked={formData.contactada || false}
+                        onCheckedChange={(checked) => setFormData({ ...formData, contactada: checked })}
+                      />
+                      <Label htmlFor="contactada" className="text-sm">
+                        {formData.contactada ? "Sí" : "No"}
+                      </Label>
+                    </div>
                   </div>
 
                   <div>
-                    <Label htmlFor="dataSource">Fuente de Datos (opcional)</Label>
-                    <Input
-                      id="dataSource"
-                      value={formData.dataSource || ""}
-                      onChange={(e) => setFormData({ ...formData, dataSource: e.target.value })}
-                      placeholder="ej. Sitio web oficial, contacto directo"
-                    />
+                    <Label htmlFor="encuesta">Encuesta Completada</Label>
+                    <div className="flex items-center space-x-2 mt-2">
+                      <Switch
+                        id="encuesta"
+                        checked={formData.encuesta || false}
+                        onCheckedChange={(checked) => setFormData({ ...formData, encuesta: checked })}
+                      />
+                      <Label htmlFor="encuesta" className="text-sm">
+                        {formData.encuesta ? "Sí" : "No"}
+                      </Label>
+                    </div>
                   </div>
                 </div>
               </TabsContent>
@@ -616,11 +690,17 @@ export default function ResidencyRegistry({
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">
                     <h3 className="text-lg font-semibold">{residency.name}</h3>
-                    <Badge className={getStatusColor(residency.registryStatus, "registry")}>
-                      {residency.registryStatus}
+                    <Badge className={residency.contactada ? "bg-green-500" : "bg-gray-500"}>
+                      {residency.contactada ? "Contactada" : "No Contactada"}
+                    </Badge>
+                    <Badge className={residency.encuesta ? "bg-blue-500" : "bg-yellow-500"}>
+                      {residency.encuesta ? "Encuestada" : "No Encuestada"}
                     </Badge>
                     <Badge className={getStatusColor(residency.vacancyStatus, "vacancy")}>
-                      {residency.vacancyStatus}
+                      {residency.vacancyStatus === 'open' ? 'Abierta' :
+                       residency.vacancyStatus === 'closed' ? 'Cerrada' :
+                       residency.vacancyStatus === 'pending' ? 'Pendiente' :
+                       residency.vacancyStatus === 'unknown' ? 'Desconocido' : residency.vacancyStatus}
                     </Badge>
                   </div>
 
@@ -653,6 +733,77 @@ export default function ResidencyRegistry({
                       <span>${residency.salary.toLocaleString()}/mes</span>
                     </div>
                   )}
+
+                  {/* Sección de Contactos */}
+                  <div className="mt-4 pt-4 border-t">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="text-sm font-medium text-gray-700">Contactos Asociados</h4>
+                      {onNavigateToContacts && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => onNavigateToContacts(residency.id)}
+                          className="text-blue-600 hover:text-blue-800"
+                        >
+                          <Phone className="w-4 h-4 mr-1" />
+                          Ver todos los contactos
+                        </Button>
+                      )}
+                    </div>
+                    
+                    {(() => {
+                      const residencyContacts = getResidencyContacts(residency.id)
+                      if (residencyContacts.length === 0) {
+                        return (
+                          <div className="text-sm text-gray-500 flex items-center gap-2">
+                            <User className="w-4 h-4" />
+                            <span>No hay contactos registrados</span>
+                            {onNavigateToContacts && (
+                              <Button
+                                variant="link"
+                                size="sm"
+                                onClick={() => onNavigateToContacts(residency.id)}
+                                className="p-0 h-auto text-blue-600 hover:text-blue-800"
+                              >
+                                Agregar contacto
+                              </Button>
+                            )}
+                          </div>
+                        )
+                      }
+                      
+                      return (
+                        <div className="space-y-2">
+                          {residencyContacts.slice(0, 3).map((contact) => (
+                            <div key={contact.id} className="flex items-center justify-between p-2 bg-gray-50 rounded">
+                              <div className="flex items-center gap-2">
+                                <User className="w-4 h-4 text-gray-400" />
+                                <div>
+                                  <div className="text-sm font-medium">{contact.name}</div>
+                                  <div className="text-xs text-gray-500">{contact.position}</div>
+                                </div>
+                              </div>
+                              {onNavigateToContacts && (
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => onNavigateToContacts(residency.id)}
+                                  className="text-blue-600 hover:text-blue-800"
+                                >
+                                  Ver
+                                </Button>
+                              )}
+                            </div>
+                          ))}
+                          {residencyContacts.length > 3 && (
+                            <div className="text-xs text-gray-500 text-center">
+                              +{residencyContacts.length - 3} contactos más
+                            </div>
+                          )}
+                        </div>
+                      )
+                    })()}
+                  </div>
                 </div>
 
                 <div className="flex gap-2">

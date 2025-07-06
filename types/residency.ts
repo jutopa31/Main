@@ -29,7 +29,8 @@ export interface MedicalResidency {
 
   // Status & Progress
   registryStatus: "active" | "inactive" | "suspended" | "under_review"
-  surveyStatus: "pending" | "contacted" | "visited" | "completed"
+  contactada: boolean // SI/NO - Si se ha contactado a la residencia
+  encuesta: boolean // SI/NO - Si se ha completado la encuesta
   lastUpdated: Date
 
   // Free-text fields for flexibility

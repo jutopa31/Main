@@ -12,12 +12,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Switch } from "@/components/ui/switch"
 import { Plus, Save, Edit, Trash2, Phone, Mail, User, MessageSquare, Star, Clock, Building, Download, FileText, MessageCircle } from "lucide-react"
 import type { Contact, ContactInteraction, MedicalResidency } from "../types/residency"
+import ResidencySearch from "./ui/residency-search"
 // @ts-ignore
 import jsPDF from "jspdf"
 
 interface ContactManagementProps {
   residencies: MedicalResidency[]
   contacts: Contact[]
+  selectedResidencyId?: string | null
   onAddContact: (contact: Omit<Contact, "id" | "createdAt" | "updatedAt">) => void
   onUpdateContact: (id: string, updates: Partial<Contact>) => void
   onDeleteContact: (id: string) => void
@@ -27,6 +29,7 @@ interface ContactManagementProps {
 export default function ContactManagement({
   residencies,
   contacts,
+  selectedResidencyId,
   onAddContact,
   onUpdateContact,
   onDeleteContact,
@@ -69,8 +72,9 @@ export default function ContactManagement({
       contact.email.toLowerCase().includes(searchTerm.toLowerCase())
 
     const matchesRole = filterRole === "all" || contact.role === filterRole
+    const matchesResidency = !selectedResidencyId || contact.residencyId === selectedResidencyId
 
-    return matchesSearch && matchesRole
+    return matchesSearch && matchesRole && matchesResidency
   })
 
   const handleSubmit = () => {
@@ -426,6 +430,25 @@ export default function ContactManagement({
         <div>
           <h2 className="text-2xl font-bold">Gestión de Contactos</h2>
           <p className="text-gray-600">Administra los contactos de las residencias médicas</p>
+          {selectedResidencyId && (() => {
+            const residency = residencies.find(r => r.id === selectedResidencyId)
+            return (
+              <div className="mt-2 p-2 bg-blue-50 border border-blue-200 rounded-md">
+                <div className="flex items-center gap-2 text-sm text-blue-800">
+                  <Building className="w-4 h-4" />
+                  <span className="font-medium">Filtrando por: {residency?.name} - {residency?.hospital}</span>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => window.location.reload()}
+                    className="text-blue-600 hover:text-blue-800 p-0 h-auto"
+                  >
+                    Limpiar filtro
+                  </Button>
+                </div>
+              </div>
+            )
+          })()}
         </div>
         <div className="flex gap-2">
           <Button 
@@ -540,21 +563,12 @@ export default function ContactManagement({
 
                   <div>
                     <Label htmlFor="residencyId">Residencia Asociada *</Label>
-                    <Select
+                    <ResidencySearch
+                      residencies={residencies}
                       value={formData.residencyId || ""}
                       onValueChange={(value) => setFormData({ ...formData, residencyId: value })}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Seleccionar residencia" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {residencies.map((residency) => (
-                          <SelectItem key={residency.id} value={residency.id}>
-                            {residency.name} - {residency.hospital}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                      placeholder="Buscar residencia por nombre o hospital..."
+                    />
                   </div>
                 </div>
               </TabsContent>
