@@ -552,4 +552,4 @@ export default function ResidentSalaryManagement({
       </div>
     </div>
   )
-} 
+}
