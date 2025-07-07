@@ -110,4 +110,4 @@ export function useResidencias() {
     getResidenciasPorProvincia,
     getResidenciasPorFinanciamiento
   }
-} 
+}

@@ -102,6 +102,19 @@ export interface RegistryFilters {
   verificationStatus: string[]
 }
 
+export interface ResidentSalary {
+  id: string
+  residencyId: string
+  year: "R1" | "R2" | "R3" | "R4"
+  grossSalary: number
+  netSalary: number
+  currency: "ARS" | "USD"
+  effectiveDate: Date
+  notes?: string
+  createdAt: Date
+  updatedAt: Date
+}
+
 export interface RegistryReport {
   id: string
   title: string

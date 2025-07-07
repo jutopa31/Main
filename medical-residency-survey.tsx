@@ -5,11 +5,12 @@ import type React from "react"
 import { useState, useEffect } from "react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { MapPin, BarChart3, Phone, Building, Grid3X3, Map, Database } from "lucide-react"
+import { MapPin, BarChart3, Phone, Building, Grid3X3, Map, Database, DollarSign } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import type { MedicalResidency, Contact } from "./types/residency"
+import type { MedicalResidency, Contact, ResidentSalary } from "./types/residency"
 import ResidencyRegistry from "./components/residency-registry"
 import ContactManagement from "./components/contact-management"
+import ResidentSalaryManagement from "./components/resident-salary-management"
 import EnhancedReports from "./components/enhanced-reports"
 import GridMap from "./components/grid-map"
 import DataImportAgent from "./components/DataImportAgent"
@@ -60,6 +61,7 @@ export default function MedicalResidencySurvey() {
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 })
   const [residencies, setResidencies] = useState<MedicalResidency[]>([])
   const [contacts, setContacts] = useState<Contact[]>([])
+  const [salaries, setSalaries] = useState<ResidentSalary[]>([])
   const [mapView, setMapView] = useState<"grid" | "geographic">("grid")
   const [activeTab, setActiveTab] = useState("map")
   const [selectedResidencyForContacts, setSelectedResidencyForContacts] = useState<string | null>(null)
@@ -68,6 +70,7 @@ export default function MedicalResidencySurvey() {
   useEffect(() => {
     const savedResidencies = localStorage.getItem("medical-residencies")
     const savedContacts = localStorage.getItem("medical-contacts")
+    const savedSalaries = localStorage.getItem("medical-salaries")
 
     if (savedResidencies) {
       try {
@@ -111,11 +114,27 @@ export default function MedicalResidencySurvey() {
             })),
           })),
         )
-      } catch (error) {
-        console.error("Error loading saved contacts:", error)
+              } catch (error) {
+          console.error("Error loading saved contacts:", error)
+        }
       }
-    }
-  }, [])
+
+      if (savedSalaries) {
+        try {
+          const parsed = JSON.parse(savedSalaries)
+          setSalaries(
+            parsed.map((s: any) => ({
+              ...s,
+              createdAt: new Date(s.createdAt),
+              updatedAt: new Date(s.updatedAt),
+              effectiveDate: new Date(s.effectiveDate),
+            })),
+          )
+        } catch (error) {
+          console.error("Error loading saved salaries:", error)
+        }
+      }
+    }, [])
 
   // Save data to localStorage whenever data changes
   useEffect(() => {
@@ -129,6 +148,12 @@ export default function MedicalResidencySurvey() {
       localStorage.setItem("medical-contacts", JSON.stringify(contacts))
     }
   }, [contacts])
+
+  useEffect(() => {
+    if (salaries.length > 0) {
+      localStorage.setItem("medical-salaries", JSON.stringify(salaries))
+    }
+  }, [salaries])
 
   const handleMouseEnter = (provinceId: string, event: React.MouseEvent) => {
     setHoveredProvince(provinceId)
@@ -206,6 +231,24 @@ export default function MedicalResidencySurvey() {
           : c,
       ),
     )
+  }
+
+  const handleAddSalary = (salaryData: Omit<ResidentSalary, "id" | "createdAt" | "updatedAt">) => {
+    const newSalary: ResidentSalary = {
+      ...salaryData,
+      id: Date.now().toString(),
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }
+    setSalaries((prev) => [...prev, newSalary])
+  }
+
+  const handleUpdateSalary = (id: string, updates: Partial<ResidentSalary>) => {
+    setSalaries((prev) => prev.map((s) => (s.id === id ? { ...s, ...updates, updatedAt: new Date() } : s)))
+  }
+
+  const handleDeleteSalary = (id: string) => {
+    setSalaries((prev) => prev.filter((s) => s.id !== id))
   }
 
   const handleGenerateReport = (reportConfig: any) => {
@@ -365,14 +408,14 @@ export default function MedicalResidencySurvey() {
   return (
     <div className="w-full max-w-7xl mx-auto p-4 space-y-6">
       <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold text-gray-900">Registro Nacional de Residencias Médicas</h1>
+        <h1 className="text-3xl font-bold text-gray-900">Registro Nacional de Residencias del Equipo de Salud</h1>
         <p className="text-gray-600">
           Plataforma integral para el relevamiento y gestión de residencias médicas en Argentina
         </p>
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-6">
           <TabsTrigger value="map" className="flex items-center gap-2">
             <MapPin className="w-4 h-4" />
             Mapa Interactivo
@@ -384,6 +427,10 @@ export default function MedicalResidencySurvey() {
           <TabsTrigger value="contacts" className="flex items-center gap-2">
             <Phone className="w-4 h-4" />
             Gestión de Contactos
+          </TabsTrigger>
+          <TabsTrigger value="salaries" className="flex items-center gap-2">
+            <DollarSign className="w-4 h-4" />
+            Remuneraciones
           </TabsTrigger>
           <TabsTrigger value="reports" className="flex items-center gap-2">
             <BarChart3 className="w-4 h-4" />
@@ -571,6 +618,16 @@ export default function MedicalResidencySurvey() {
             onUpdateContact={handleUpdateContact}
             onDeleteContact={handleDeleteContact}
             onAddInteraction={handleAddInteraction}
+          />
+        </TabsContent>
+
+        <TabsContent value="salaries">
+          <ResidentSalaryManagement
+            residencies={residencies}
+            salaries={salaries}
+            onAddSalary={handleAddSalary}
+            onUpdateSalary={handleUpdateSalary}
+            onDeleteSalary={handleDeleteSalary}
           />
         </TabsContent>
 

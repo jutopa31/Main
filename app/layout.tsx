@@ -3,7 +3,7 @@ import './globals.css'
 import DatabaseImportExport from '../components/DatabaseImportExport'
 
 export const metadata: Metadata = {
-  title: 'v0 App',
+  title: 'Registro Nacional de Residencias del Equipo de Salud',
   description: 'Created with v0',
   generator: 'v0.dev',
 }

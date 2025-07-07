@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Switch } from "@/components/ui/switch"
-import { Plus, Save, Edit, Trash2, Phone, Mail, User, MessageSquare, Star, Clock, Building, Download, FileText, MessageCircle } from "lucide-react"
+import { Plus, Save, Edit, Trash2, Phone, Mail, User, MessageSquare, Star, Clock, Building, Download, FileText, MessageCircle, MapPin } from "lucide-react"
 import type { Contact, ContactInteraction, MedicalResidency } from "../types/residency"
 import ResidencySearch from "./ui/residency-search"
 // @ts-ignore
@@ -40,6 +40,7 @@ export default function ContactManagement({
   const [selectedContact, setSelectedContact] = useState<string | null>(null)
   const [searchTerm, setSearchTerm] = useState("")
   const [filterRole, setFilterRole] = useState("all")
+  const [filterProvince, setFilterProvince] = useState("all")
 
   const [formData, setFormData] = useState<Partial<Contact>>({
     name: "",
@@ -64,6 +65,24 @@ export default function ContactManagement({
     followUpDate: undefined as Date | undefined,
   })
 
+  // Obtener provincias únicas de las residencias
+  const getUniqueProvinces = () => {
+    const provinces = new Set(residencies.map(r => r.province))
+    return Array.from(provinces).sort()
+  }
+
+  // Obtener residencias por provincia
+  const getResidenciesByProvince = (province: string) => {
+    return residencies.filter(r => r.province === province)
+  }
+
+  // Obtener contactos por provincia
+  const getContactsByProvince = (province: string) => {
+    const residenciesInProvince = getResidenciesByProvince(province)
+    const residencyIds = residenciesInProvince.map(r => r.id)
+    return contacts.filter(c => residencyIds.includes(c.residencyId))
+  }
+
   const filteredContacts = contacts.filter((contact) => {
     const matchesSearch =
       !searchTerm ||
@@ -73,15 +92,40 @@ export default function ContactManagement({
 
     const matchesRole = filterRole === "all" || contact.role === filterRole
     const matchesResidency = !selectedResidencyId || contact.residencyId === selectedResidencyId
+    
+    // Filtro por provincia
+    const matchesProvince = filterProvince === "all" || (() => {
+      const residency = residencies.find(r => r.id === contact.residencyId)
+      return residency && residency.province === filterProvince
+    })()
 
-    return matchesSearch && matchesRole && matchesResidency
+    return matchesSearch && matchesRole && matchesResidency && matchesProvince
   })
 
+  // Agrupar contactos por provincia para mostrar estadísticas
+  const getContactsByProvinceStats = () => {
+    const stats: Record<string, { total: number; primary: number; withInteractions: number }> = {}
+    
+    getUniqueProvinces().forEach(province => {
+      const provinceContacts = getContactsByProvince(province)
+      stats[province] = {
+        total: provinceContacts.length,
+        primary: provinceContacts.filter(c => c.isPrimaryContact).length,
+        withInteractions: provinceContacts.filter(c => c.contactHistory.length > 0).length
+      }
+    })
+    
+    return stats
+  }
+
   const handleSubmit = () => {
+    console.log("[LOG] handleSubmit llamado", { editingId, formData });
     if (editingId) {
+      console.log("[LOG] Editando contacto", { editingId, updates: formData });
       onUpdateContact(editingId, formData)
       setEditingId(null)
     } else {
+      console.log("[LOG] Agregando nuevo contacto", formData);
       onAddContact(formData as Omit<Contact, "id" | "createdAt" | "updatedAt">)
     }
     resetForm()
@@ -107,6 +151,7 @@ export default function ContactManagement({
   }
 
   const handleEdit = (contact: Contact) => {
+    console.log("[LOG] handleEdit llamado", contact);
     setFormData(contact)
     setEditingId(contact.id)
     setShowAddForm(true)
@@ -131,6 +176,11 @@ export default function ContactManagement({
   const getResidencyName = (residencyId: string) => {
     const residency = residencies.find((r) => r.id === residencyId)
     return residency ? `${residency.name} - ${residency.hospital}` : "Residencia no encontrada"
+  }
+
+  const getResidencyProvince = (residencyId: string) => {
+    const residency = residencies.find((r) => r.id === residencyId)
+    return residency ? residency.province : "Provincia no encontrada"
   }
 
   const getRoleColor = (role: string) => {
@@ -199,79 +249,45 @@ export default function ContactManagement({
           yPosition = 20
         }
         
-        // Información básica del contacto
+        // Información del contacto
         doc.setFontSize(14)
-        doc.setFont('helvetica', 'bold')
-        doc.text(`${index + 1}. ${contact.name}`, 20, yPosition)
-        
+        doc.text(`${contact.name}`, 20, yPosition)
         yPosition += 8
+        
         doc.setFontSize(10)
-        doc.setFont('helvetica', 'normal')
+        doc.text(`Cargo: ${contact.position}`, 20, yPosition)
+        yPosition += 6
         
-        // Detalles del contacto
-        doc.text(`Cargo: ${contact.position}`, 25, yPosition)
-        yPosition += 5
-        doc.text(`Email: ${contact.email}`, 25, yPosition)
-        yPosition += 5
-        doc.text(`Teléfono: ${contact.phone}`, 25, yPosition)
-        yPosition += 5
-        doc.text(`Rol: ${getRoleText(contact.role)}`, 25, yPosition)
-        yPosition += 5
-        doc.text(`Residencia: ${getResidencyName(contact.residencyId)}`, 25, yPosition)
+        doc.text(`Email: ${contact.email}`, 20, yPosition)
+        yPosition += 6
         
-        if (contact.department) {
-          yPosition += 5
-          doc.text(`Departamento: ${contact.department}`, 25, yPosition)
+        doc.text(`Teléfono: ${contact.phone}`, 20, yPosition)
+        yPosition += 6
+        
+        doc.text(`Residencia: ${getResidencyName(contact.residencyId)}`, 20, yPosition)
+        yPosition += 6
+        
+        doc.text(`Provincia: ${getResidencyProvince(contact.residencyId)}`, 20, yPosition)
+        yPosition += 6
+        
+        if (contact.notes.length > 0) {
+          doc.text(`Notas: ${contact.notes.join(', ')}`, 20, yPosition)
+          yPosition += 6
         }
         
-        if (contact.isPrimaryContact) {
-          yPosition += 5
-          doc.text(`Contacto Principal: Sí`, 25, yPosition)
-        }
-        
-        if (contact.lastContactDate) {
-          yPosition += 5
-          doc.text(`Último contacto: ${new Date(contact.lastContactDate).toLocaleDateString('es-AR')}`, 25, yPosition)
-        }
-        
-        // Historial de contactos (últimos 3)
-        if (contact.contactHistory.length > 0) {
-          yPosition += 8
-          doc.setFontSize(10)
-          doc.setFont('helvetica', 'bold')
-          doc.text("Historial de Contactos:", 25, yPosition)
-          yPosition += 5
-          doc.setFontSize(8)
-          doc.setFont('helvetica', 'normal')
-          
-          const recentHistory = contact.contactHistory.slice(-3)
-          recentHistory.forEach((interaction) => {
-            doc.text(`• ${new Date(interaction.date).toLocaleDateString('es-AR')} - ${interaction.type} - ${interaction.outcome}`, 30, yPosition)
-            yPosition += 4
-            if (interaction.notes) {
-              doc.text(`  Nota: ${interaction.notes}`, 35, yPosition)
-              yPosition += 4
-            }
-          })
-        }
-        
-        yPosition += 10
+        yPosition += 10 // Espacio entre contactos
       })
       
-      // Número de página
-      doc.setFontSize(8)
-      doc.text(`Página ${pageNumber}`, 20, 290)
-      
-      doc.save("reporte-contactos-residencias.pdf")
+      // Guardar el PDF
+      doc.save(`contactos-residencias-${new Date().toISOString().split('T')[0]}.pdf`)
     } catch (error) {
-      console.error("Error al generar PDF:", error)
-      alert("Error al generar el PDF. Por favor, inténtalo de nuevo.")
+      console.error('Error al generar PDF:', error)
+      alert('Error al generar el PDF')
     }
   }
 
   const handleExportContactsCSV = () => {
     try {
-      // Crear encabezados del CSV
       const headers = [
         "Nombre",
         "Cargo",
@@ -281,43 +297,35 @@ export default function ContactManagement({
         "Teléfono Alternativo",
         "Rol",
         "Contacto Principal",
-        "Residencia Asociada",
-        "Dirección",
+        "Residencia",
+        "Provincia",
         "Método Preferido",
-        "Mejor Horario",
+        "Notas",
         "Último Contacto",
-        "Total Interacciones",
-        "Fecha de Creación",
-        "Última Actualización"
+        "Total Interacciones"
       ]
       
-      // Crear datos del CSV
-      const csvData = contacts.map(contact => [
-        contact.name,
-        contact.position,
-        contact.department || "",
-        contact.email,
-        contact.phone,
-        contact.alternativePhone || "",
-        getRoleText(contact.role),
-        contact.isPrimaryContact ? "Sí" : "No",
-        getResidencyName(contact.residencyId),
-        contact.address || "",
-        contact.preferredContactMethod || "",
-        contact.bestTimeToContact || "",
-        contact.lastContactDate ? new Date(contact.lastContactDate).toLocaleDateString('es-AR') : "",
-        contact.contactHistory.length.toString(),
-        new Date(contact.createdAt).toLocaleDateString('es-AR'),
-        new Date(contact.updatedAt).toLocaleDateString('es-AR')
-      ])
+      const csvData = [
+        headers.join(","),
+        ...contacts.map(contact => [
+          contact.name,
+          contact.position,
+          contact.department || "",
+          contact.email,
+          contact.phone,
+          contact.alternativePhone || "",
+          getRoleText(contact.role),
+          contact.isPrimaryContact ? "Sí" : "No",
+          getResidencyName(contact.residencyId),
+          getResidencyProvince(contact.residencyId),
+          contact.preferredContactMethod,
+          contact.notes.join('; '),
+          contact.lastContactDate ? new Date(contact.lastContactDate).toLocaleDateString() : "",
+          contact.contactHistory.length.toString()
+        ].map(field => `"${field}"`).join(","))
+      ].join("\n")
       
-      // Combinar encabezados y datos
-      const csvContent = [headers, ...csvData]
-        .map(row => row.map(cell => `"${cell}"`).join(','))
-        .join('\n')
-      
-      // Crear y descargar el archivo
-      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+      const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' })
       const link = document.createElement('a')
       const url = URL.createObjectURL(blob)
       link.setAttribute('href', url)
@@ -327,34 +335,35 @@ export default function ContactManagement({
       link.click()
       document.body.removeChild(link)
     } catch (error) {
-      console.error("Error al generar CSV:", error)
-      alert("Error al generar el CSV. Por favor, inténtalo de nuevo.")
+      console.error('Error al generar CSV:', error)
+      alert('Error al generar el CSV')
     }
   }
 
-  // Función para exportar contactos filtrados
   const handleExportFilteredContacts = () => {
     try {
       const doc = new jsPDF()
       
-      // Título del reporte
+      // Título del reporte filtrado
       doc.setFontSize(20)
       doc.text("Reporte de Contactos Filtrados", 20, 20)
       
-      // Información del reporte
+      // Información de filtros aplicados
       doc.setFontSize(12)
       doc.text(`Fecha de generación: ${new Date().toLocaleDateString('es-AR')}`, 20, 35)
       doc.text(`Total de contactos filtrados: ${filteredContacts.length}`, 20, 45)
       
-      if (searchTerm) {
-        doc.text(`Búsqueda: "${searchTerm}"`, 20, 55)
+      if (filterProvince !== "all") {
+        doc.text(`Provincia filtrada: ${filterProvince}`, 20, 55)
       }
-      
       if (filterRole !== "all") {
-        doc.text(`Filtro por rol: ${getRoleText(filterRole)}`, 20, 65)
+        doc.text(`Rol filtrado: ${getRoleText(filterRole)}`, 20, 65)
+      }
+      if (searchTerm) {
+        doc.text(`Búsqueda: "${searchTerm}"`, 20, 75)
       }
       
-      let yPosition = 80
+      let yPosition = 90
       const pageHeight = 280
       let pageNumber = 1
       
@@ -366,37 +375,40 @@ export default function ContactManagement({
           yPosition = 20
         }
         
-        // Información básica del contacto
+        // Información del contacto
         doc.setFontSize(14)
-        doc.setFont('helvetica', 'bold')
-        doc.text(`${index + 1}. ${contact.name}`, 20, yPosition)
-        
+        doc.text(`${contact.name}`, 20, yPosition)
         yPosition += 8
+        
         doc.setFontSize(10)
-        doc.setFont('helvetica', 'normal')
+        doc.text(`Cargo: ${contact.position}`, 20, yPosition)
+        yPosition += 6
         
-        // Detalles del contacto
-        doc.text(`Cargo: ${contact.position}`, 25, yPosition)
-        yPosition += 5
-        doc.text(`Email: ${contact.email}`, 25, yPosition)
-        yPosition += 5
-        doc.text(`Teléfono: ${contact.phone}`, 25, yPosition)
-        yPosition += 5
-        doc.text(`Rol: ${getRoleText(contact.role)}`, 25, yPosition)
-        yPosition += 5
-        doc.text(`Residencia: ${getResidencyName(contact.residencyId)}`, 25, yPosition)
+        doc.text(`Email: ${contact.email}`, 20, yPosition)
+        yPosition += 6
         
-        yPosition += 10
+        doc.text(`Teléfono: ${contact.phone}`, 20, yPosition)
+        yPosition += 6
+        
+        doc.text(`Residencia: ${getResidencyName(contact.residencyId)}`, 20, yPosition)
+        yPosition += 6
+        
+        doc.text(`Provincia: ${getResidencyProvince(contact.residencyId)}`, 20, yPosition)
+        yPosition += 6
+        
+        if (contact.notes.length > 0) {
+          doc.text(`Notas: ${contact.notes.join(', ')}`, 20, yPosition)
+          yPosition += 6
+        }
+        
+        yPosition += 10 // Espacio entre contactos
       })
       
-      // Número de página
-      doc.setFontSize(8)
-      doc.text(`Página ${pageNumber}`, 20, 290)
-      
-      doc.save("contactos-filtrados.pdf")
+      // Guardar el PDF
+      doc.save(`contactos-filtrados-${new Date().toISOString().split('T')[0]}.pdf`)
     } catch (error) {
-      console.error("Error al generar PDF filtrado:", error)
-      alert("Error al generar el PDF filtrado. Por favor, inténtalo de nuevo.")
+      console.error('Error al generar PDF filtrado:', error)
+      alert('Error al generar el PDF filtrado')
     }
   }
 
@@ -422,6 +434,8 @@ export default function ContactManagement({
   }
 
   const stats = getContactStats()
+  const provinceStats = getContactsByProvinceStats()
+  const uniqueProvinces = getUniqueProvinces()
 
   return (
     <div className="space-y-6">
@@ -476,16 +490,19 @@ export default function ContactManagement({
         </div>
       </div>
 
+      {/* Estadísticas por Provincia - Movidas al final */}
+
       {/* Search and Filters */}
       <Card>
         <CardContent className="p-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Input
-              placeholder="Buscar contactos..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="md:col-span-2"
-            />
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="md:col-span-2">
+              <Input
+                placeholder="Buscar contactos..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
 
             <Select value={filterRole} onValueChange={setFilterRole}>
               <SelectTrigger>
@@ -498,6 +515,20 @@ export default function ContactManagement({
                 <SelectItem value="administrator">Administrador</SelectItem>
                 <SelectItem value="secretary">Secretario</SelectItem>
                 <SelectItem value="other">Otro</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <Select value={filterProvince} onValueChange={setFilterProvince}>
+              <SelectTrigger>
+                <SelectValue placeholder="Filtrar por provincia" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Todas las provincias</SelectItem>
+                {uniqueProvinces.map(province => (
+                  <SelectItem key={province} value={province}>
+                    {province} ({provinceStats[province]?.total || 0})
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
@@ -525,7 +556,10 @@ export default function ContactManagement({
                     <Input
                       id="name"
                       value={formData.name || ""}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      onChange={(e) => {
+                        console.log("[LOG] Cambio en campo nombre", e.target.value);
+                        setFormData({ ...formData, name: e.target.value })
+                      }}
                       placeholder="ej. Dr. Juan Pérez"
                     />
                   </div>
@@ -536,7 +570,10 @@ export default function ContactManagement({
                       id="email"
                       type="email"
                       value={formData.email || ""}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      onChange={(e) => {
+                        console.log("[LOG] Cambio en campo email", e.target.value);
+                        setFormData({ ...formData, email: e.target.value })
+                      }}
                       placeholder="ej. juan.perez@hospital.com"
                     />
                   </div>
@@ -840,6 +877,39 @@ export default function ContactManagement({
           </Card>
         )}
       </div>
+
+      {/* Estadísticas por Provincia - Al final de la página */}
+      <Card className="mt-8 bg-gray-50 border-gray-200">
+        <CardHeader className="pb-3">
+          <CardTitle className="flex items-center gap-2 text-sm text-gray-600">
+            <MapPin className="w-4 h-4" />
+            Estadísticas por Provincia
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="pt-0">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+            {uniqueProvinces.map(province => (
+              <div key={province} className="p-2 border border-gray-200 rounded-md bg-white">
+                <h4 className="font-medium text-xs mb-1 text-gray-700">{province}</h4>
+                <div className="grid grid-cols-3 gap-1 text-xs">
+                  <div className="text-center">
+                    <div className="font-bold text-blue-600">{provinceStats[province]?.total || 0}</div>
+                    <div className="text-gray-500 text-xs">Total</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="font-bold text-yellow-600">{provinceStats[province]?.primary || 0}</div>
+                    <div className="text-gray-500 text-xs">Principales</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="font-bold text-green-600">{provinceStats[province]?.withInteractions || 0}</div>
+                    <div className="text-gray-500 text-xs">Con Interacciones</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
     </div>
   )
 }

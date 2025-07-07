@@ -377,4 +377,4 @@ export default function PDFProcessor({ onTextExtracted }: PDFProcessorProps) {
       </Card>
     </div>
   )
-} 
+}

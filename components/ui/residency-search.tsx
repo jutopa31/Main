@@ -191,4 +191,4 @@ export default function ResidencySearch({
       )}
     </div>
   )
-} 
+}
